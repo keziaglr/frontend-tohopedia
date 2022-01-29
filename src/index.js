@@ -3,11 +3,35 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+  from, 
+  ApolloProvider,
+  useQuery
+} from "@apollo/client";
+import {onError} from '@apollo/client/link/error'
+
+onError(({graphqlErrors, networkError})=>{
+  if(graphqlErrors){
+    graphqlErrors.map(({message, location, path})=>{
+      alert(`[GraphQL error]: Message: ${message}, Location: ${location}, Path: ${path}`)
+    })
+    if (networkError) alert(`[Network error]: ${networkError}`);
+  }
+})
+
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  uri: "http://localhost:8080/query",
+});
 
 ReactDOM.render(
-  <React.StrictMode>
+  <ApolloProvider client={client}>
     <App />
-  </React.StrictMode>,
+  </ApolloProvider>,
   document.getElementById('root')
 );
 

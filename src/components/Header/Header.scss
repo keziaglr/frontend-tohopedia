@@ -1,0 +1,26 @@
+.navbar{
+    display: flex;
+    justify-content: space-evenly;
+    background-color: white;
+    height: 50px;
+    *{
+        margin-top: 5px;
+    }
+
+    #registerBtn{
+        margin-left: 15px;
+    }
+
+    .location{
+        margin-top: 10px;
+    }
+    
+    a{
+        margin: 10px;
+    }
+    
+}
+
+input[type=text]{
+    margin: 0px 10px;
+}
