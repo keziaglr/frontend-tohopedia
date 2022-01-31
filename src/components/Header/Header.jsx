@@ -6,7 +6,7 @@ function Header(){
     return(
         <div className='navbar'>
             <div>
-                <input type="text" name="search" id="" />
+                <input type="text" name="search" id="search" />
                 <input className='btn' type="button" value="Search" />
             </div>
             <div className='icon'>
