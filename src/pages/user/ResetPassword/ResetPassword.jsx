@@ -1,9 +1,9 @@
-import { Link,  useNavigate } from 'react-router-dom'
-import React, {useEffect} from 'react'
+import { useNavigate } from 'react-router-dom'
+import React, {} from 'react'
 import { useMutation } from '@apollo/client';
-import {CREATE_OTP, CREATE_USER} from '../../../graphql/user/Mutations'
+import {CREATE_OTP, RESET_PASSWORD} from '../../../graphql/user/Mutations'
 
-function RegisterPage(){
+function ResetPassword(){
     const [createOTP, {errorCreateOTP}] = useMutation(CREATE_OTP)
     const navigate = useNavigate()
 
@@ -19,33 +19,29 @@ function RegisterPage(){
                             }
                         })
 
-                        navigate('/otp')
+                        navigate('/otp3')
                     }
                 }}>
         <div className='content'>
             <div className='container'>            
-                <h2 className='title'>Sign Up Now</h2>
+                <h2 className='title'>Reset Password</h2>
                     <div>
                         <label id='lbl'>Email</label>
                         <input type="text" name="email" id="email" />
                     </div>
                     <div>
-                        <input className='btn' type="submit" value="Sign Up" />
+                        <input className='btn' type="submit" value="Next" />
                     </div>
-                    <div>Already have a Tohopedia account? <Link to='/login'>
-                    <a>Log in</a> 
-                    </Link></div>
                 </div>
             </div>
         </form>
     )
 }
 
-function ConfirmOTP(){
-    const [createUser, {errorCreateUser}] = useMutation(CREATE_USER)
+function ConfirmOTP3(){
+    const [resetPassword, {errorCreateUser}] = useMutation(RESET_PASSWORD)
     const navigate = useNavigate()
     return (
-        
             <form onSubmit={e => {
                     var email = document.getElementById("email").value
                     var otp = document.getElementById("otp").value
@@ -54,17 +50,13 @@ function ConfirmOTP(){
                     if(email === "" || otp === "" || password === ""){
                         alert("Email and OTP must be filled!")
                     }else{
-                        createUser({
+                        resetPassword({
                             variables:{
                                 email: email,
                                 otp: otp,
                                 password: password
                             }
                         })
-
-                        if(errorCreateUser){
-                            console.log(errorCreateUser)
-                        }
 
                         navigate('/')
                     }
@@ -94,4 +86,4 @@ function ConfirmOTP(){
     )
 }
 
-export {RegisterPage, ConfirmOTP}
+export {ResetPassword, ConfirmOTP3}
