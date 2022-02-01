@@ -1,7 +1,7 @@
-import logo from './logo.svg';
-import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import {LoginPage, ConfirmOTP2} from './pages/user/LoginPage/LoginPage';
 import HomePage from './pages/user/HomePage/HomePage';
+import SearchProduct from './pages/user/HomePage/SearchProduct';
 import ProductDetail from './pages/user/ProductDetail/ProductDetail';
 import {RegisterPage, ConfirmOTP} from './pages/user/RegisterPage/RegisterPage';
 import {ResetPassword, ConfirmOTP3} from './pages/user/ResetPassword/ResetPassword';
@@ -19,6 +19,7 @@ function App() {
         <Route path="/otp3" element={<ConfirmOTP3/>}/>
         <Route path="/reset" element={<ResetPassword/>}/>
         <Route path="/product/:id" element={<ProductDetail/>}/>
+        <Route path="/search/:q" element={<SearchProduct/>}/>
       </Routes>
     </Router>
   );

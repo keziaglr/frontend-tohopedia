@@ -9,7 +9,6 @@ export function CardProduct(props){
                 <h4><b>{props.product.name}</b></h4>
                 <p>{props.product.price}</p>
             </div>
-
         </Link>
     )
 }
@@ -25,7 +24,7 @@ export function CardCategory(props){
 }
 
 export function CardVoucher(props){
-    console.log(props)
+    // console.log(props)
     return(
         <Link to={`voucher/${props.voucher.id}`} className='card-product'>
             <div className="card-container">
@@ -33,6 +32,18 @@ export function CardVoucher(props){
                 <p>
                     {props.voucher.discountRate} %
                 </p>
+            </div>
+        </Link>
+    )
+}
+
+export function CardShop(props){
+    // console.log(props)
+    return(
+        <Link to={`shop/${props.shop.id}`} className='card-product'>
+            <img src={props.shop.image} alt="image" style={{width:"100%"}}></img>
+            <div className="card-container">
+                <h4><b>{props.shop.name}</b></h4>
             </div>
         </Link>
     )

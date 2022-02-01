@@ -1,14 +1,21 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './Header.scss'
 import {IoNotifications, IoCart, IoMail} from 'react-icons/io5'
 
 function Header(){
+    var navigate = useNavigate()
     return(
         <div className='navbar'>
-            <div>
+            <form>  
                 <input type="text" name="search" id="search" />
-                <input className='btn' type="button" value="Search" />
-            </div>
+                <input className='btn' type="button" value="Search" onClick={e =>{
+                    var search = document.getElementById("search").value
+
+                    if(search !== ""){
+                        navigate('/search/'+search)
+                    }
+                }} />
+            </form>
             <div className='icon'>
                 <Link to={`/cart`}>
                     <IoCart size={30}/>

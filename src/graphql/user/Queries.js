@@ -54,6 +54,20 @@ export const LOAD_DISC_PRODUCTS = gql`
     }
 `
 
+export const LOAD_PRODUCTS_SEARCH = gql`
+    query GetProductsSearch($search: String!, $sort: String, $filter: String){
+        getProductsSearch(search: $search, sort: $sort, filter: $filter){
+            id,
+            name,
+            price,
+            images{
+            id,
+            url
+            }
+        }
+    }
+`
+
 export const LOAD_CATEGORIES = gql`
     query Categories{
         categories{
@@ -85,14 +99,14 @@ export const GET_SHOP_BY_PRODUCT = gql`
         getShopByProduct(productId: $productId){
             id, 
             name,
-            image
+            image, 
         }
     }
 `
 
-export const GET_VENDOR_BY_SHOP = gql`
-    query GetVendorByShop($shopId: Int!){
-        getVendorByShop(shopId: $shopId){
+export const GET_VENDOR_BY_PRODUCT = gql`
+    query GetVendorByProduct($productId: Int!){
+        getVendorByProduct(productId: $productId){
             id,
             name,
             deliveryTime,
@@ -101,9 +115,9 @@ export const GET_VENDOR_BY_SHOP = gql`
     }
 `
 
-export const GET_VOUCHER_BY_SHOP = gql`
-    query GetVoucherByShop($shopId: Int!){
-        getVoucherByShop(shopId: $shopId){
+export const GET_VOUCHER_BY_PRODUCT = gql`
+    query GetVoucherByProduct($productId: Int!){
+        getVoucherByProduct(productId: $productId){
             id,
             name,
             description,
@@ -111,6 +125,44 @@ export const GET_VOUCHER_BY_SHOP = gql`
             tnc,
             startTime,
             endTime,
+        }
+    }
+`
+
+export const GET_SHOP_MATCH = gql`
+    query GetShopMatch($search: String!){
+        getShopMatch(search: $search){
+            id, 
+            name,
+            image, 
+        }
+    }
+`
+
+export const GET_PRODUCTS_MATCH = gql`
+    query GetProductsMatch($search: String!){
+        getProductsMatch(search: $search){
+            id,
+            name,
+            price,
+            images{
+            id,
+            url
+            }
+        }
+    }
+`
+
+export const LOAD_PRODUCTS_SORT = gql`
+    query GetProductsSort($by: String!, $order: String!){
+        getProductsSort(by: $search, order: $order){
+            id,
+            name,
+            price,
+            images{
+            id,
+            url
+            }
         }
     }
 `

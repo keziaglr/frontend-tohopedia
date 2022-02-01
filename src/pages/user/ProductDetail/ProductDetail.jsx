@@ -1,41 +1,41 @@
 import Header from "../../../components/Header/Header"
-import { useQuery, useMutation } from '@apollo/client';
-import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_SHOP, GET_VOUCHER_BY_SHOP, GET_PRODUCT_BY_ID} from '../../../graphql/user/Queries'
+import { useQuery } from '@apollo/client';
+import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID} from '../../../graphql/user/Queries'
 import {CardVoucher} from "../../../components/Card/Card";
 import { useParams } from "react-router-dom";
 
 function ProductDetail(){
-    let {id} = useParams();
+    var {id} = useParams();
     
     const {data: shop} = useQuery(GET_SHOP_BY_PRODUCT, {
         variables: {productId: id}
     });
-    console.log(shop)
-    // var shopId = shop.getShopByProduct.id
+    // console.log(shop)
     const {data: product} = useQuery(GET_PRODUCT_BY_ID, {
         variables: {id: id}
     });
+    console.log(product)
 
     var result1 = ''
     if(product != null){
         result1 = 
         <div className="card-content">
-            {product.getProductById.images?.map(image=>{
+            {product.getProductById?.images.map(image=>{
                 return(
-                    <img key={image.id} width={500} src={image.url}/>
+                    <img key={image.id} width={500} src={image.url} alt={image.name}/>
                 )
             })}
         </div>
     }
 
     var result2 = ''
-    const {data: ship} = useQuery(GET_VENDOR_BY_SHOP, {
-        variables: {shopId: shop.getShopByProduct.id}
+    const {data: ship} = useQuery(GET_VENDOR_BY_PRODUCT, {
+        variables: {productId: id}
     });
     if(ship != null){
         result2 =
         <div>
-            {ship.getVendorByShop?.map(vendor=>{
+            {ship.getVendorByProduct?.map(vendor=>{
                 return(
                     <p>
                         Shipping Vendor : {vendor.name}
@@ -48,13 +48,13 @@ function ProductDetail(){
     }
 
     var result3 = ''
-    const {data: voucher} = useQuery(GET_VOUCHER_BY_SHOP, {
-        variables: {shopId: shop.getShopByProduct.id}
+    const {data: vouchers} = useQuery(GET_VOUCHER_BY_PRODUCT, {
+        variables: {productId: id}
     });
-    if(voucher != null){
+    if(vouchers != null){
         result3 =
         <div className="card-content">
-            {voucher.getVoucherByShop?.map(voucher=>{
+            {vouchers.getVoucherByProduct?.map(voucher=>{
                 return(
                     <CardVoucher key={voucher.id} voucher={voucher}/>
                 )
@@ -78,7 +78,7 @@ function ProductDetail(){
                 <p>Rating {product.getProductById.rating}</p>
             </div>
             <div>
-                <img src={shop.getShopByProduct.image}/>
+                <img src={shop.getShopByProduct.image} alt={shop.getShopByProduct.name}/>
                 <p>{shop.getShopByProduct.name}</p>
             </div>
             <div>
