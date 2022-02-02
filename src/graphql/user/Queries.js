@@ -39,6 +39,15 @@ export const LOAD_CAMPAIGNS = gql`
     }
 `
 
+export const LOAD_COURIERS = gql`
+    query couriers{
+        vendors{
+            id,
+            name
+        }
+    }
+`
+
 export const LOAD_DISC_PRODUCTS = gql`
     query GetProductsTopDisc{
         getProductsTopDisc{
@@ -55,17 +64,18 @@ export const LOAD_DISC_PRODUCTS = gql`
 `
 
 export const LOAD_PRODUCTS_SEARCH = gql`
-    query GetProductsSearch($search: String!, $sort: String, $filter: String){
-        getProductsSearch(search: $search, sort: $sort, filter: $filter){
-            id,
-            name,
-            price,
-            images{
-            id,
-            url
-            }
+query GetProductsByShop($search: String!, $sort: String, $type: [Int], $location: [String], $maxPrice: Int, $minPrice: Int, $courier: [Int], $rating: Int, $shippingTime: Int, $productAdded:Int){
+    getProductsSearch(search: $search, sort: $sort, input:{type: $type, location: $location, maxPrice: $maxPrice, minPrice: $minPrice, courier: $courier, rating: $rating, shippingTime: $shippingTime, productAdded: $productAdded} ){
+        id,
+        name,
+    		price,
+    		rating,
+    		images{
+          id,
+          url
         }
     }
+}
 `
 
 export const LOAD_CATEGORIES = gql`
