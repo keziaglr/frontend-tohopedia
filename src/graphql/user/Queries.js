@@ -34,6 +34,7 @@ export const GET_USER_BY_EMAIL = gql`
 export const LOAD_CAMPAIGNS = gql`
     query campaigns{
         campaigns{
+            id,
             url
         }
     }
@@ -174,5 +175,20 @@ export const LOAD_PRODUCTS_SORT = gql`
             url
             }
         }
+    }
+`
+
+export const GET_PRODUCTS_BY_CATEGORIES = gql`
+    query GetProductsByCategories($categoryId: Int!){
+      getProductsByCategories(categoryId: $categoryId){
+        id,
+        name,
+    		price,
+    		rating,
+    		images{
+          id,
+          url
+        }
+      }
     }
 `

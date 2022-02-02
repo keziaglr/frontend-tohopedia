@@ -17,7 +17,6 @@ function SearchProduct(){
     const [duration, setDuration] = useState(null)
     const [productAdded, setProductAdded] = useState(null)
 
-    console.log(shopType)
     function getValue(name) {
         var form = document.getElementById("searchForm");
         var inputs = form.getElementsByTagName("input");
@@ -48,11 +47,17 @@ function SearchProduct(){
     const {data: shop} = useQuery(GET_SHOP_MATCH, {
         variables: {search: q}
     });
+    var result2 = ''
+    if(shop != null){
+        result2 = 
+        <div className="card-content">
+            <CardShop key={shop.getShopMatch.id} shop={shop.getShopMatch}/>
+        </div> 
+    } 
 
     const {data: productsMatch} = useQuery(GET_PRODUCTS_MATCH, {
         variables: {search: q}
     });
-    // console.log(products)
     var result = ''
     var productList = ''
     if(products != null){
@@ -219,9 +224,7 @@ function SearchProduct(){
             <div style={{display:"flex"}}>
                 <div>
                     <h4>Recommended Shop</h4>
-                    <div className="card-content">
-                        {/* <CardShop key={shop.getShopMatch.id} shop={shop.getShopMatch}/> */}
-                    </div> 
+                    {result2}
                 </div>
                 <div>
                     <h4>Recommended Products</h4>

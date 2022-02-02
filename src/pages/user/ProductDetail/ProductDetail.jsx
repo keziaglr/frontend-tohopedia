@@ -10,11 +10,18 @@ function ProductDetail(){
     const {data: shop} = useQuery(GET_SHOP_BY_PRODUCT, {
         variables: {productId: id}
     });
-    // console.log(shop)
+    var result4 = ''
+    if(shop != null){
+        result4 = 
+        <div>
+            <img src={shop.getShopByProduct.image} alt={shop.getShopByProduct.name}/>
+            <p>{shop.getShopByProduct.name}</p>
+        </div>
+    }
+
     const {data: product} = useQuery(GET_PRODUCT_BY_ID, {
         variables: {id: id}
     });
-    console.log(product)
 
     var result1 = ''
     if(product != null){
@@ -25,6 +32,13 @@ function ProductDetail(){
                     <img key={image.id} width={500} src={image.url} alt={image.name}/>
                 )
             })}
+            <div>
+                <h3>{product.getProductById.name}</h3>
+                <h5>{product.getProductById.price}</h5>
+                <h6>{product.getProductById.description}</h6>
+                <p>Terjual {product.getProductById.soldCount}</p>
+                <p>Rating {product.getProductById.rating}</p>
+            </div>
         </div>
     }
 
@@ -71,15 +85,7 @@ function ProductDetail(){
                 {result1}
             </div>
             <div>
-                <h3>{product.getProductById.name}</h3>
-                <h5>{product.getProductById.price}</h5>
-                <h6>{product.getProductById.description}</h6>
-                <p>Terjual {product.getProductById.soldCount}</p>
-                <p>Rating {product.getProductById.rating}</p>
-            </div>
-            <div>
-                <img src={shop.getShopByProduct.image} alt={shop.getShopByProduct.name}/>
-                <p>{shop.getShopByProduct.name}</p>
+                {result4}
             </div>
             <div>
                 {result2}

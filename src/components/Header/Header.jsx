@@ -6,6 +6,11 @@ function Header(){
     var navigate = useNavigate()
     return(
         <div className='navbar'>
+            <div>
+            <Link to={`/`}>
+                <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Logo-Tokopedia.png/1200px-Logo-Tokopedia.png' height={30} alt='logo'/>
+            </Link>
+            </div>
             <form>  
                 <input type="text" name="search" id="search" />
                 <input className='btn' type="button" value="Search" onClick={e =>{
