@@ -28,7 +28,7 @@ function Header(){
                 <Link to={`/notifications`}>
                     <IoNotifications size={30}/>
                 </Link>
-                <Link to={`/mail`}>
+                <Link to={`/chat`}>
                     <IoMail size={30}/>
                 </Link>
             </div>

@@ -192,3 +192,53 @@ export const GET_PRODUCTS_BY_CATEGORIES = gql`
       }
     }
 `
+
+export const GET_SHOP_BY_ID = gql`
+    query GetShopById($shopId: Int!){
+      getShopByID(shopId: $shopId){
+        name,
+        image,
+        badges_id,
+        points,
+        video,
+        promo{
+          id,
+          idx,
+          url
+        }
+      }
+    }
+`
+
+export const GET_PRODUCTS_BY_SHOP = gql`
+    query GetProductsByShop($shopID: Int!){
+      getProductsByShop(shopID: $shopID){
+        name,
+        price,
+        images{
+          url
+        }
+      }
+    }
+`
+
+export const GET_BEST_SELLING_PRODUCTS = gql`
+    query GetBestSellingProducts($shopId: Int!){
+      getBestSellingProducts(shopId: $shopId){
+        name,
+        price,
+        soldCount,
+        images{
+            url
+        }
+      }
+    }
+`
+
+export const GET_BADGE = gql`
+    query GetBadge($shopID: Int!){
+      getBadge(shopID: $shopID){
+        badge
+      }
+    }
+`

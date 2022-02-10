@@ -38,9 +38,8 @@ export function CardVoucher(props){
 }
 
 export function CardShop(props){
-    // console.log(props)
     return(
-        <Link to={`shop/${props.shop.id}`} className='card-product'>
+        <Link to={`/shop/${props.shop.id}`} className='card-product'>
             <img src={props.shop.image} alt="image" style={{width:"100%"}}></img>
             <div className="card-container">
                 <h4><b>{props.shop.name}</b></h4>

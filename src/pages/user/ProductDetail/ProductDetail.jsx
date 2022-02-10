@@ -1,11 +1,15 @@
 import Header from "../../../components/Header/Header"
+import ImageGallery from "../../../components/ImageGallery/ImageGallery"
 import { useQuery } from '@apollo/client';
 import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID} from '../../../graphql/user/Queries'
-import {CardVoucher} from "../../../components/Card/Card";
-import { useParams } from "react-router-dom";
+import {CardVoucher, CardShop} from "../../../components/Card/Card";
+import { useParams, Link } from "react-router-dom";
+import { useState } from "react";
+import {IoChatbubbleEllipses, IoHeartSharp, IoShareSocialSharp} from 'react-icons/io5'
 
 function ProductDetail(){
     var {id} = useParams();
+    const [qty, setQty] = useState(1)
     
     const {data: shop} = useQuery(GET_SHOP_BY_PRODUCT, {
         variables: {productId: id}
@@ -13,32 +17,42 @@ function ProductDetail(){
     var result4 = ''
     if(shop != null){
         result4 = 
-        <div>
-            <img src={shop.getShopByProduct.image} alt={shop.getShopByProduct.name}/>
-            <p>{shop.getShopByProduct.name}</p>
-        </div>
+        <div className="card-content">
+            <CardShop key={shop.getShopByProduct.id} shop={shop.getShopByProduct}/>
+        </div> 
     }
 
     const {data: product} = useQuery(GET_PRODUCT_BY_ID, {
         variables: {id: id}
     });
 
-    var result1 = ''
+    var result1 = '', result5 = ''
+    const [src, setSrc] = useState('');
     if(product != null){
         result1 = 
         <div className="card-content">
-            {product.getProductById?.images.map(image=>{
+            <div className="container-img" style={{display: "block"}}>
+                <img id="expandedImg" style={{width: "100%"}} src={src}/>
+            </div>
+            <div className="row">
+            {product.getProductById?.images.map(image=>{        
                 return(
-                    <img key={image.id} width={500} src={image.url} alt={image.name}/>
+                    <ImageGallery key={image.id} image={image} onSrcChange={setSrc} srcs={src} />
                 )
             })}
-            <div>
-                <h3>{product.getProductById.name}</h3>
-                <h5>{product.getProductById.price}</h5>
-                <h6>{product.getProductById.description}</h6>
-                <p>Terjual {product.getProductById.soldCount}</p>
-                <p>Rating {product.getProductById.rating}</p>
             </div>
+            <div>
+                <h1>{product.getProductById.name}</h1>
+                <h3>{product.getProductById.price}</h3>
+                <h4>{product.getProductById.description}</h4>
+                <p>Terjual : {product.getProductById.soldCount}</p>
+                <p>Rating : {product.getProductById.rating}</p>
+            </div>
+        </div>
+
+        var subtotal = product.getProductById.price* qty
+        result5 = <div>
+            Subtotal = {subtotal} 
         </div>
     }
 
@@ -51,11 +65,14 @@ function ProductDetail(){
         <div>
             {ship.getVendorByProduct?.map(vendor=>{
                 return(
-                    <p>
-                        Shipping Vendor : {vendor.name}
-                        Arrival Time Estimation : {vendor.deliveryTime}
-                        Price : {vendor.price}
-                    </p>
+
+                    <div>
+                        <p>Shipping Vendor : {vendor.name}</p>
+                        <ul class="a">
+                            <li>Arrival Time Estimation : {vendor.deliveryTime}</li>
+                            <li>Price : {vendor.price}</li>
+                        </ul>
+                    </div>
                 )
             })}
         </div> 
@@ -84,14 +101,51 @@ function ProductDetail(){
             <div>
                 {result1}
             </div>
+                <div >
+                    <form >
+                        <h3>Purchase Form</h3>
+                        <div>
+                            <input type="button" className='btn2' value="-" id="minus" onClick={() => setQty(document.getElementById("qty").value--)} />
+                            <input type="text" name="qty" id="qty" value={qty}/>
+                            <input type="button" className='btn2' value="+" id="plus" onClick={() => setQty(document.getElementById("qty").value++)}/>
+                        </div>
+                        <div>
+                            <input type="text" name="note" id="note" placeholder="Input Note" />
+                        </div>
+                        <div>
+                            {result5}
+                        </div>
+                        <div>
+                            <input type="button" className='btn' value="Add to cart" />
+                            <input type="button" className='btn' value="Instant buy" />
+                        </div>
+                        <div className='icon'>
+                            <Link to={`/chat`}>
+                                <IoChatbubbleEllipses size={25}/>
+                            </Link>
+                            <Link to={`/wishlist`}>
+                                <IoHeartSharp size={25}/>
+                            </Link>
+                            <Link to={`/share`}>
+                                <IoShareSocialSharp size={25}/>
+                            </Link>
+                        </div>
+                    </form>
+                </div>
             <div>
-                {result4}
-            </div>
-            <div>
-                {result2}
-            </div>
-            <div>
-                {result3}
+                <div>
+                    <h3>Shop</h3>
+                    {result4}
+                </div>
+                <div>
+                    <h3>Shipping Vendor</h3>
+                    {result2}
+                </div>
+                <div>
+                    <h3>Voucher</h3>
+                    {result3}
+                </div>
+                
             </div>
         </div>
     )

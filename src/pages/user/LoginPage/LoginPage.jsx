@@ -1,40 +1,13 @@
 import './LoginPage.scss'
 import React, {useState} from 'react'
 import { useQuery, useMutation } from '@apollo/client';
-import { Link, useNavigate} from 'react-router-dom'
+import { Link, useNavigate, useParams} from 'react-router-dom'
 import {GET_USER_EMAIL_PASS} from '../../../graphql/user/Queries'
 import {CREATE_OTP, AUTH_USER} from '../../../graphql/user/Mutations'
 
 
 function LoginPage(){
-    const [createOTP, {errorCreateOTP}] = useMutation(CREATE_OTP)
     const navigate = useNavigate()
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const {data: user} = useQuery(GET_USER_EMAIL_PASS, {
-        variables: {email: email, password: password}
-    })
-    console.log('this is ' + email)
-    if(email != '' || password != ''){
-        if(user != null){
-            console.log(user.getUserByEmailPass.id)
-            if(user.getUserByEmailPass.id === 0){
-                alert("Invalid Account!")
-            }else if(user.getUserByEmailPass.isSuspended){
-                // if(confirm("Want to request unblock?")){
-                //     //request
-                // }
-            }else{
-                // createOTP({
-                //     variables:{
-                //         email: email
-                //     }
-                // })
-                navigate('/otp2')
-                return
-            }
-        }
-    }
 
     return (
             <form onSubmit={e => {
@@ -43,8 +16,7 @@ function LoginPage(){
                     if(email === "" || password === ""){
                         alert("All fields must be filled!")
                     }else{
-                        setEmail(document.getElementById("email").value)
-                        setPassword(document.getElementById("password").value)
+                        navigate('/auth/'+email+'/'+password)
                     }
                 }}>
         <div className='content'>
@@ -83,17 +55,40 @@ function LoginPage(){
     )
 }
 
-function ConfirmOTP2(){
-    const [authUser, {data, error, loading}] = useMutation(AUTH_USER)
+function AuthUser(){
+    var {email, password} = useParams();
+    const navigate = useNavigate()
+    const [createOTP, {errorCreateOTP}] = useMutation(CREATE_OTP)
+    const {data: user} = useQuery(GET_USER_EMAIL_PASS, {
+        variables: {email: email, password: password}
+    })
 
+    if(user != null){
+        console.log(user)
+        if(user.getUserByEmailPass.id === 0){
+            navigate('/login')
+            alert('Invalid accounts')
+        }else{
+            alert('create otp')
+            createOTP({
+                variables:{
+                    email: email
+                }
+            })
+            navigate('/otp2')
+        }
+    }
+    return null
+}
+
+function ConfirmOTP2(){
+    const [authUser, {data}] = useMutation(AUTH_USER)
     const navigate = useNavigate()
     return (
             <form onSubmit={e => {
                 var email = document.getElementById("email").value
                 var otp = document.getElementById("otp").value
                 var password = document.getElementById("password").value
-
-                alert(data.authUser.id)
                 if(email === "" || otp === "" || password === ""){
                     alert("All fields must be filled!")
                 }else{
@@ -104,9 +99,7 @@ function ConfirmOTP2(){
                             password: password
                         }
                     })
-
                     navigate('/')
-
                 }
             }}>
         <div className='content'>
@@ -133,4 +126,4 @@ function ConfirmOTP2(){
         </form>
     )
 }
-export {LoginPage, ConfirmOTP2}
+export {LoginPage, ConfirmOTP2, AuthUser}
