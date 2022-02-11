@@ -10,6 +10,10 @@ import {ResetPassword, ConfirmOTP3} from './pages/user/ResetPassword/ResetPasswo
 import './App.css';
 import {WishlistPage, WishlistPage2} from './pages/user/WishlistPage/WishlistPage';
 import CartPage from './pages/user/CartPage/CartPage';
+import { Logout, UpdateProfile } from './pages/user/UpdateProfile/UpdateProfile';
+import { VoucherPage } from './pages/user/VoucherPage/VoucherPage';
+import { OpenShop } from './pages/seller/OpenShop';
+import { UpdateShop } from './pages/seller/UpdateShop';
 
 function App() {
   return (
@@ -31,6 +35,11 @@ function App() {
         <Route path="/wishlist" element={<WishlistPage/>}/>
         <Route path="/wishlist2" element={<WishlistPage2/>}/>
         <Route path="/cart" element={<CartPage/>}/>
+        <Route path="/user/update" element={<UpdateProfile/>}/>
+        <Route path="/voucher/:id" element={<VoucherPage/>}/>
+        <Route path="/logout" element={<Logout/>}/>
+        <Route path="/shop/create" element={<OpenShop/>}/>
+        <Route path="/shop/update/:id" element={<UpdateShop/>}/>
       </Routes>
     </Router>
   );

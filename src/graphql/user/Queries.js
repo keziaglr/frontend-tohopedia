@@ -115,6 +115,16 @@ export const GET_SHOP_BY_PRODUCT = gql`
     }
 `
 
+export const GET_SHOP_BY_USER = gql`
+    query GetShopByUser($userId: Int!){
+        getShopByUser(userId: $userId){
+            id, 
+            name,
+            image, 
+        }
+    }
+`
+
 export const GET_VENDOR_BY_PRODUCT = gql`
     query GetVendorByProduct($productId: Int!){
         getVendorByProduct(productId: $productId){
@@ -266,5 +276,20 @@ export const GET_BADGE = gql`
       getBadge(shopID: $shopID){
         badge
       }
+    }
+`
+
+export const GET_VOUCHER_BY_ID = gql`
+    query GetVoucherById($voucherId: Int!){
+        getVoucherById(voucherId: $voucherId){
+            id,
+        	name,
+            description,
+            discountRate,
+            code,
+            tnc,
+            startTime,
+            endTime
+        }
     }
 `

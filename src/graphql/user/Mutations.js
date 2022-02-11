@@ -64,3 +64,20 @@ export const DELETE_WISHLIST = gql`
         }
     }
 `
+
+export const DELETE_CART = gql`
+    mutation DeleteWishlist($userId: Int!, $productId: Int!){
+        deleteWishlist(userId: $userId, productId: $productId){
+            user_id,
+            product_id
+        }
+    }
+`
+
+export const UPDATE_PROFILE = gql`
+    mutation UpdateUser($userId: Int!, $profilePicture: String!, $name: String!, $dob: Date!, $gender: String!, $email: String!, $phoneNumber: String!, $address: String!){
+        updateUser(id: $userId, input:{profilePicture:$profilePicture, name:$name, dob:$dob, gender:$gender, email:$email, phoneNumber:$phoneNumber, address:$address}){
+            id
+        }
+    }
+`

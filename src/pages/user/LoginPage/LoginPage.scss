@@ -35,6 +35,18 @@ body{
     }
 }
 
+.container-wishlist{
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    background-color: white;
+    div{
+        align-self:center;
+        margin: 10px;
+        display: flex;
+    }
+}
+
 .btn{
     border: none;
     background-color: $main-color;

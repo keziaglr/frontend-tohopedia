@@ -200,7 +200,13 @@ function SearchProduct(){
                             <div>
                                 <label>Last Added</label>
                                 <div>
-                                    <input type="number" name="added" id="added" />
+                                <select name="added" id="added">
+                                    <option value="">Select</option>
+                                    <option value="7">7 days ago</option>
+                                    <option value="14">14 days ago</option>
+                                    <option value="30">1 month ago</option>
+                                    <option value="90">3 month ago</option>
+                                </select>
                                 </div>
                             </div>
                             </div>
