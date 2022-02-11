@@ -1,7 +1,8 @@
 import Header from "../../../components/Header/Header"
 import ImageGallery from "../../../components/ImageGallery/ImageGallery"
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID} from '../../../graphql/user/Queries'
+import {CREATE_CART, CREATE_WISHLIST} from '../../../graphql/user/Mutations'
 import {CardVoucher, CardShop} from "../../../components/Card/Card";
 import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
@@ -9,6 +10,8 @@ import {IoChatbubbleEllipses, IoHeartSharp, IoShareSocialSharp} from 'react-icon
 
 function ProductDetail(){
     var {id} = useParams();
+    const [createCart] = useMutation(CREATE_CART)
+    const [createWishlist] = useMutation(CREATE_WISHLIST)
     const [qty, setQty] = useState(1)
     
     const {data: shop} = useQuery(GET_SHOP_BY_PRODUCT, {
@@ -68,7 +71,7 @@ function ProductDetail(){
 
                     <div>
                         <p>Shipping Vendor : {vendor.name}</p>
-                        <ul class="a">
+                        <ul className="a">
                             <li>Arrival Time Estimation : {vendor.deliveryTime}</li>
                             <li>Price : {vendor.price}</li>
                         </ul>
@@ -102,10 +105,12 @@ function ProductDetail(){
                 {result1}
             </div>
                 <div >
-                    <form >
+                    <form>
                         <h3>Purchase Form</h3>
                         <div>
-                            <input type="button" className='btn2' value="-" id="minus" onClick={() => setQty(document.getElementById("qty").value--)} />
+                            <input type="button" className='btn2' value="-" id="minus" onClick={() => {
+                                if(document.getElementById("qty").value > 1){
+                                setQty(document.getElementById("qty").value--)}}} />
                             <input type="text" name="qty" id="qty" value={qty}/>
                             <input type="button" className='btn2' value="+" id="plus" onClick={() => setQty(document.getElementById("qty").value++)}/>
                         </div>
@@ -116,16 +121,34 @@ function ProductDetail(){
                             {result5}
                         </div>
                         <div>
-                            <input type="button" className='btn' value="Add to cart" />
+                            <input type="button" className='btn' value="Add to cart" onClick={()=> {
+                                if (document.getElementById("qty").value > 0){
+                                    createCart({
+                                        variables:{
+                                            productId: id,
+                                            userId: localStorage.getItem("userNow"),
+                                            qty: document.getElementById("qty").value,
+                                            note: document.getElementById("note").value
+                                        }
+                                    })
+                                    alert('Success Insert Cart')
+                                }
+                            }} />
                             <input type="button" className='btn' value="Instant buy" />
                         </div>
                         <div className='icon'>
                             <Link to={`/chat`}>
                                 <IoChatbubbleEllipses size={25}/>
                             </Link>
-                            <Link to={`/wishlist`}>
-                                <IoHeartSharp size={25}/>
-                            </Link>
+                            <IoHeartSharp size={25} onClick={()=>{
+                                createWishlist({
+                                    variables:{
+                                        productId: id,
+                                        userId: localStorage.getItem("userNow"),
+                                    }
+                                })
+                                alert('Success Insert Wishlist')
+                            }} />
                             <Link to={`/share`}>
                                 <IoShareSocialSharp size={25}/>
                             </Link>

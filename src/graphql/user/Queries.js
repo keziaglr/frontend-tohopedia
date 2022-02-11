@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_USER_AUTH = gql`
-    query getUserAuth($email: String!, $password: String!, $otp: String!){
-        getUserAuth(input:{email: $email, password: $password, otpCode: $otp}){
+    query getUserAuth($email: String!, $password: String!, $otpCode: String!){
+        getUserAuth(input:{email: $email, password: $password, otpCode: $otpCode}){
             id,
             email,
             password
@@ -213,6 +213,32 @@ export const GET_SHOP_BY_ID = gql`
 export const GET_PRODUCTS_BY_SHOP = gql`
     query GetProductsByShop($shopID: Int!){
       getProductsByShop(shopID: $shopID){
+        name,
+        price,
+        images{
+          url
+        }
+      }
+    }
+`
+
+export const GET_USER_WISHLIST = gql`
+    query GetUserWishlist($userId: Int!){
+      getUserWishlist(userId: $userId){
+        id,
+        name,
+        price,
+        images{
+          url
+        }
+      }
+    }
+`
+
+export const CARTS = gql`
+    query Carts($userId: Int!){
+      carts(userId: $userId){
+        id,
         name,
         price,
         images{

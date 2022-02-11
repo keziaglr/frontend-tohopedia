@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import './Card.scss'
 
@@ -10,6 +11,35 @@ export function CardProduct(props){
                 <p>{props.product.price}</p>
             </div>
         </Link>
+    )
+}
+
+export function CardProductWishlist(props){
+    return(
+        <Link to={`/product/${props.product.id}`} className='card-product'>
+            <img src={props.product.images[0].url} alt="image" style={{width:"100%"}}></img>
+            <div className="card-container">
+                <h4><b>{props.product.name}</b></h4>
+                <p>{props.product.price}</p>
+            </div>
+            <Link to={`/buy`}><input type="button" className='btn' value="Buy" /></Link>
+        </Link>
+    )
+}
+
+export function CardProductWishlist2(props){
+    return(
+        <div className='card-product'>
+            <img src={props.product.images[0].url} alt="image" style={{width:"100%"}}></img>
+            <div className="card-container">
+                <h4><b>{props.product.name}</b></h4>
+                <p>{props.product.price}</p>
+            </div>
+            <div>
+                <Link to={`/buy`}><input type="button" className='btn' value="Buy" /></Link>
+                <input type="checkbox" value={props.product.id} name="cbWishlistForm" />
+            </div>
+        </div>
     )
 }
 

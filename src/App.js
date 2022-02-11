@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
-import {LoginPage, ConfirmOTP2, AuthUser} from './pages/user/LoginPage/LoginPage';
+import {LoginPage, ConfirmOTP2, AuthUser, AuthUser2} from './pages/user/LoginPage/LoginPage';
 import HomePage from './pages/user/HomePage/HomePage';
 import ShopPage from './pages/user/ShopPage/ShopPage';
 import SearchProduct from './pages/user/HomePage/SearchProduct';
@@ -8,6 +8,8 @@ import ProductDetail from './pages/user/ProductDetail/ProductDetail';
 import {RegisterPage, ConfirmOTP} from './pages/user/RegisterPage/RegisterPage';
 import {ResetPassword, ConfirmOTP3} from './pages/user/ResetPassword/ResetPassword';
 import './App.css';
+import {WishlistPage, WishlistPage2} from './pages/user/WishlistPage/WishlistPage';
+import CartPage from './pages/user/CartPage/CartPage';
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
         <Route path='/' element={<HomePage/>} />
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/auth/:email/:password" element={<AuthUser/>}/>
+        <Route path="/auth2/:email/:password/:otp" element={<AuthUser2/>}/>
         <Route path="/register" element={<RegisterPage/>}/>
         <Route path="/otp" element={<ConfirmOTP/>}/>
         <Route path="/otp2" element={<ConfirmOTP2/>}/>
@@ -25,6 +28,9 @@ function App() {
         <Route path="/search/:q" element={<SearchProduct/>}/>
         <Route path="/category/:id" element={<ProductCategories/>}/>
         <Route path="/shop/:id" element={<ShopPage/>}/>
+        <Route path="/wishlist" element={<WishlistPage/>}/>
+        <Route path="/wishlist2" element={<WishlistPage2/>}/>
+        <Route path="/cart" element={<CartPage/>}/>
       </Routes>
     </Router>
   );

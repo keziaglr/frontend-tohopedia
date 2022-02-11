@@ -18,7 +18,6 @@ function HomePage(){
     //       };
     //     },
     // )
-
     if(data3 != null){
         result3 = 
         <div>

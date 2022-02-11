@@ -35,3 +35,32 @@ export const AUTH_USER = gql`
         }
     }
 `
+
+export const CREATE_CART = gql`
+    mutation CreateCart($userId: Int!, $productId: Int!, $qty: Int!, $note: String!){
+      createCart(userId: $userId, productId: $productId, qty: $qty, note: $note){
+        user_id,
+        product_id,
+        qty,
+        note
+      }
+    }
+`
+
+export const CREATE_WISHLIST = gql`
+    mutation CreateWishlist($userId: Int!, $productId: Int!){
+      createWishlist(userId: $userId, productId: $productId){
+        user_id,
+        product_id
+      }
+    }
+`
+
+export const DELETE_WISHLIST = gql`
+    mutation DeleteWishlist($userId: Int!, $productId: [Int!]!){
+        deleteWishlist(userId: $userId, productId: $productId){
+            user_id,
+            product_id
+        }
+    }
+`

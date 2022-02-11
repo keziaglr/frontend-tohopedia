@@ -70,7 +70,7 @@ function ConfirmOTP3(){
                     </div>
                     <div>
                         <label id='lbl'>Password</label>
-                        <input type="text" name="password" id="password" />
+                        <input type="password" name="password" id="password" />
                     </div>
                     <div>
                         <label id='lbl'>OTP</label>

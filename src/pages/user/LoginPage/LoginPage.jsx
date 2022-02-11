@@ -2,8 +2,8 @@ import './LoginPage.scss'
 import React, {useState} from 'react'
 import { useQuery, useMutation } from '@apollo/client';
 import { Link, useNavigate, useParams} from 'react-router-dom'
-import {GET_USER_EMAIL_PASS} from '../../../graphql/user/Queries'
-import {CREATE_OTP, AUTH_USER} from '../../../graphql/user/Mutations'
+import {GET_USER_AUTH, GET_USER_EMAIL_PASS} from '../../../graphql/user/Queries'
+import {CREATE_OTP} from '../../../graphql/user/Mutations'
 
 
 function LoginPage(){
@@ -28,7 +28,7 @@ function LoginPage(){
                 </div>
                 <div>
                     <label>Password</label>
-                    <input type="text" name="password" id="password" />
+                    <input type="password" name="password" id="password" />
                 </div>
                 <div >
                     <div>
@@ -64,12 +64,9 @@ function AuthUser(){
     })
 
     if(user != null){
-        console.log(user)
         if(user.getUserByEmailPass.id === 0){
             navigate('/login')
-            alert('Invalid accounts')
         }else{
-            alert('create otp')
             createOTP({
                 variables:{
                     email: email
@@ -82,7 +79,6 @@ function AuthUser(){
 }
 
 function ConfirmOTP2(){
-    const [authUser, {data}] = useMutation(AUTH_USER)
     const navigate = useNavigate()
     return (
             <form onSubmit={e => {
@@ -92,14 +88,7 @@ function ConfirmOTP2(){
                 if(email === "" || otp === "" || password === ""){
                     alert("All fields must be filled!")
                 }else{
-                    authUser({
-                        variables:{
-                            email: email,
-                            otp: otp,
-                            password: password
-                        }
-                    })
-                    navigate('/')
+                    navigate('/auth2/'+email+'/'+password+'/'+otp)
                 }
             }}>
         <div className='content'>
@@ -111,7 +100,7 @@ function ConfirmOTP2(){
                 </div>
                 <div>
                     <label>Password</label>
-                    <input type="text" name="password" id="password" />
+                    <input type="password" name="password" id="password" />
                 </div>
                 <div>
                     <label>OTP</label>
@@ -126,4 +115,26 @@ function ConfirmOTP2(){
         </form>
     )
 }
-export {LoginPage, ConfirmOTP2, AuthUser}
+
+function AuthUser2(){
+    var {email, password, otp} = useParams();
+    const navigate = useNavigate()
+    const {data: user} = useQuery(GET_USER_AUTH, {
+        variables: {email: email, password: password, otpCode: otp}
+    })
+    if(user != null){
+        if(user.getUserAuth.id === 0){
+            navigate('/otp2')
+            alert("Credentials Invalid")
+        }else{
+            alert("Success Login")
+            localStorage.setItem("userNow", user.getUserAuth.id)
+            navigate('/')
+        }
+    }else if(user === null){
+        navigate('/otp2')
+    }
+    return null
+}
+
+export {LoginPage, ConfirmOTP2, AuthUser, AuthUser2}
