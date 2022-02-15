@@ -25,12 +25,17 @@ input[type=text]{
     margin: 0px 10px;
 }
 .dropbtn {
-    background-color: #4CAF50;
-    color: white;
+    // background-color: #4CAF50;
+    color: black;
     padding: 16px;
     font-size: 16px;
     border: none;
     cursor: pointer;
+}
+
+.pp{
+  border-radius: 50px;
+  margin-top: 0;
 }
   
 .dropdown {
@@ -60,6 +65,6 @@ input[type=text]{
     display: block;
   }
   
-  .dropdown:hover .dropbtn {
-    background-color: #3e8e41;
-  }
+  // .dropdown:hover .dropbtn {
+  //   background-color: #3e8e41;
+  // }

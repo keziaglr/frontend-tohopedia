@@ -1,10 +1,10 @@
 import Header from "../../../components/Header/Header"
 import { useQuery, useMutation } from '@apollo/client';
-import {GET_SHOP_BY_ID, GET_BEST_SELLING_PRODUCTS, GET_PRODUCTS_BY_SHOP, GET_BADGE} from '../../../graphql/user/Queries'
+import {GET_SHOP_BY_ID, GET_BEST_SELLING_PRODUCTS, GET_PRODUCTS_BY_SHOP, GET_BADGE, GET_SHOP_BY_USER} from '../../../graphql/user/Queries'
 import {CardProduct, CardShop} from "../../../components/Card/Card";
 import ImageCarousel from "../../../components/Carousel/ImageCarousel";
 import React, { useState, useEffect } from 'react'
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import YouTube from 'react-youtube';
 import './ShopPage.scss'
 
@@ -21,6 +21,20 @@ function ShopPage(){
     // //       };
     // //     },
     // // )
+
+    const {data: shop1} = useQuery(GET_SHOP_BY_USER, {
+        variables: {userId: parseInt(localStorage.getItem('userNow'))}
+    });
+
+    var btn = ''
+    if(shop1 != null){
+        btn = 
+        <div>
+            <Link to={`/product/insert`}>
+                <input type="button" value="Insert Product" className="btn"  />
+            </Link>
+        </div>
+    }
 
     const {data: shop} = useQuery(GET_SHOP_BY_ID, {
         variables: {shopId: id}
@@ -93,21 +107,6 @@ function ShopPage(){
         </div>
     }
 
-    // var result5 = ''
-    // const {data: data1} = useQuery(LOAD_CATEGORIES, {
-    //     variables: {shopID: id}
-    // });
-    // if(data1 != null){
-    //     const categoriesList = data1.categories;
-    //     result5 = <div className="card-content">
-    //         {categoriesList?.map(category=>{
-    //             return(
-    //                 <CardCategory key={category.id} category={category}/>
-    //             )
-    //         })}
-    //     </div>
-    // }
-
     const {data: products} = useQuery(GET_PRODUCTS_BY_SHOP, {
         variables: {shopID: id}
     });
@@ -134,7 +133,11 @@ function ShopPage(){
                 </div>
                 <div>
                     {result}
+                    <div>
+                        {btn}
+                    </div>
                 </div>
+                
             </div>
             <div>
                 {result2}

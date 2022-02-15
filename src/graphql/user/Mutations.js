@@ -98,3 +98,37 @@ export const CHECKOUT = gql`
       }
     }
 `
+
+//insertProduct(name: String!, categoryId: Int!, images: [String!]!, description: String!, price: Int!, discount: Int, metaData: String): Product!
+
+export const INSERT_PRODUCT = gql`
+    mutation InsertProduct($shopId: Int!, $name: String!, $categoryId: Int!, $images: [String!]!, $description: String!, $price: Int!, $discount: Int, $label: [String!]!, $value: [String!]!){
+        insertProduct(shopId: $shopId, name: $name, categoryId: $categoryId, images: $images, description: $description, price: $price, discount: $discount, input:{label:$label, value:$value}){
+          id,
+          name,
+          price
+        }
+    }
+`
+
+
+export const UPDATE_PRODUCT = gql`
+    mutation UpdateProduct($productId: Int!, $shopId: Int!, $name: String!, $categoryId: Int!, $images: [String!]!, $description: String!, $price: Int!, $discount: Int, $label: [String!]!, $value: [String!]!){
+        updateProduct(productId: $productId shopId: $shopId, name: $name, categoryId: $categoryId, images: $images, description: $description, price: $price, discount: $discount, input:{label:$label, value:$value}){
+          id,
+          name,
+          price,
+          images{
+            url
+          }
+        }
+    }
+`
+
+export const DELETE_PRODUCT = gql`
+    mutation DeleteProduct($productId: Int!){
+      deleteProduct(productId: $productId){
+        id
+      }
+    }
+`

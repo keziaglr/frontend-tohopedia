@@ -37,6 +37,8 @@ export const GET_USER_BY_ID = gql`
             id,
             email,
             password,
+            name,
+            profilePicture,
             shippingAddress{
                 id,
                 address
@@ -150,6 +152,17 @@ export const GET_VENDOR_BY_PRODUCT = gql`
     }
 `
 
+export const GET_VENDOR_BY_ID = gql`
+    query GetVendorByID($id: Int!){
+        getVendorByID(id: $id){
+            id,
+            name,
+            deliveryTime,
+            price,
+        }
+    }
+`
+
 export const GET_VENDOR_BY_USER = gql`
     query GetVendorByUser($userId: Int!){
         getVendorByUser(userId: $userId){
@@ -231,6 +244,7 @@ export const GET_PRODUCTS_BY_CATEGORIES = gql`
 export const GET_SHOP_BY_ID = gql`
     query GetShopById($shopId: Int!){
       getShopByID(shopId: $shopId){
+        id,
         name,
         image,
         badges_id,
@@ -248,6 +262,7 @@ export const GET_SHOP_BY_ID = gql`
 export const GET_PRODUCTS_BY_SHOP = gql`
     query GetProductsByShop($shopID: Int!){
       getProductsByShop(shopID: $shopID){
+        id,
         name,
         price,
         images{
@@ -260,6 +275,7 @@ export const GET_PRODUCTS_BY_SHOP = gql`
 export const GET_PRODUCTS_BY_ID = gql`
     query GetProductsById($id: Int!){
       getProductById(id: $id){
+        id,
         name,
         price,
         images{
@@ -288,6 +304,7 @@ export const CARTS = gql`
         id,
         name,
         price,
+        discount,
         images{
           url
         }
@@ -308,6 +325,7 @@ export const CARTS2 = gql`
 export const GET_BEST_SELLING_PRODUCTS = gql`
     query GetBestSellingProducts($shopId: Int!){
       getBestSellingProducts(shopId: $shopId){
+        id,
         name,
         price,
         soldCount,
@@ -370,12 +388,31 @@ export const GET_TRANSACTION_BY_USER = gql`
     }
 `
 
+export const GET_TRANSACTION_BY_ID = gql`
+    query GetTransactionByID($userId: Int!, $id: Int!){
+        getTransactionByID(userId: $userId, id: $id){
+            id,
+            user_id,
+            transactionType,
+            transactionDate,
+            status,
+            invoiceNumber,
+            total,
+            shippingAddress,
+            paymentMethod,
+            paymentDiscount,
+            shipping_id
+        }
+    }
+`
+
 export const GET_TRANSACTION_DETAIL = gql`
 query GetTransactionDetail($userId: Int!, $transactionId: Int!){
   getTransactionDetail(userId: $userId, transactionId: $transactionId){
     id,
     transaction_id,
     product_id, 
+    qty
   }
 }
 `

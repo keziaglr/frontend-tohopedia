@@ -16,6 +16,8 @@ import { OpenShop } from './pages/seller/OpenShop';
 import { UpdateShop } from './pages/seller/UpdateShop';
 import CheckoutPage from './pages/user/CartPage/CheckoutPage';
 import TransactionPage from './pages/user/Transaction/TransactionPage';
+import TransactionDetailPage from './pages/user/Transaction/TransactionDetailPage';
+import { DeleteProduct, InsertProduct } from './pages/user/ManageProduct/ManageProduct';
 
 function App() {
   return (
@@ -44,6 +46,9 @@ function App() {
         <Route path="/shop/update/:id" element={<UpdateShop/>}/>
         <Route path="/checkout" element={<CheckoutPage/>}/>
         <Route path="/transaction" element={<TransactionPage/>}/>
+        <Route path="/transaction/:id" element={<TransactionDetailPage/>}/>
+        <Route path="/product/insert" element={<InsertProduct/>}/>
+        <Route path="/product/delete/:id" element={<DeleteProduct/>}/>
       </Routes>
     </Router>
   );

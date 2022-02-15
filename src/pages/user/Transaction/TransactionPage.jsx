@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { GET_BADGE, GET_PRODUCTS_BY_ID, GET_SHOP_BY_PRODUCT, GET_TRANSACTION_BY_USER, GET_TRANSACTION_DETAIL, GET_USER_BY_ID, GET_VENDOR_BY_USER, GET_VOUCHER_CART} from '../../../graphql/user/Queries'
 import './TransactionPage.scss'
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function TransactionPage(){
     const [keyword, setKeyword] = useState(null);
@@ -18,6 +19,7 @@ function TransactionPage(){
         <div>
             {headers.getTransactionByUser?.map(header=>{
                 return(
+                    <Link to={`/transaction/${header.id}`}>
                     <div style={{margin: "50px 0px"}} className="container2">
                         <div>Transaction Type : {header.transactionType}</div>
                         <div>Transaction Date : {header.transactionDate}</div>
@@ -26,6 +28,7 @@ function TransactionPage(){
                         <DetailSection  detail={header} />
                         <div> <b>Total : {header.total}</b> </div>
                     </div>
+                    </Link>
                 )
             })}
         </div>

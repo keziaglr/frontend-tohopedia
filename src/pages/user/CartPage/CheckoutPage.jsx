@@ -89,7 +89,7 @@ function CheckoutPage(){
                                 <div>{product.name}</div>
                                 <div>{arrCart[idx++].qty} item</div>
                                 <div style={{ textDecorationLine: 'line-through' }}>IDR {product.price}</div>
-                                <div> <b>IDR {product.price-(discount1*product.price)}</b></div>
+                                <div> <b>IDR {product.price-(discount1*product.price)-product.discount}</b></div>
                             </div>
                         )        
                     })}
@@ -101,12 +101,15 @@ function CheckoutPage(){
                                 if(document.getElementById('voucherId').value == arrDisc[i].id){
                                     flag = arrDisc[i].discountRate/100
                                     for (let index = 0; index < arrProduct.length; index++) {
-                                        disc += arrProduct[index].price * (arrDisc[i].discountRate/100)
+                                        disc += (arrProduct[index].price * (arrDisc[i].discountRate/100)) + arrProduct[index].discount
                                     }
                                 }
                             }
                         }else{
                             flag = 0
+                            for (let index = 0; index < arrProduct.length; index++) {
+                                disc += arrProduct[index].discount
+                            }
                         }
                         
                         for (let index = 0; index < arrProduct.length; index++) {

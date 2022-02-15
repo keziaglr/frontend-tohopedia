@@ -1,12 +1,13 @@
 import Header from "../../../components/Header/Header"
 import ImageGallery from "../../../components/ImageGallery/ImageGallery"
 import { useMutation, useQuery } from '@apollo/client';
-import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID} from '../../../graphql/user/Queries'
+import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID, GET_SHOP_BY_USER} from '../../../graphql/user/Queries'
 import {CREATE_CART, CREATE_WISHLIST} from '../../../graphql/user/Mutations'
 import {CardVoucher, CardShop} from "../../../components/Card/Card";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {IoChatbubbleEllipses, IoHeartSharp, IoShareSocialSharp} from 'react-icons/io5'
+import { DeleteProduct } from "../ManageProduct/ManageProduct";
 
 function ProductDetail(){
     var {id} = useParams();
@@ -14,11 +15,20 @@ function ProductDetail(){
     const [createCart] = useMutation(CREATE_CART)
     const [createWishlist] = useMutation(CREATE_WISHLIST)
     const [qty, setQty] = useState(1)
-    
+    const {data: shop1} = useQuery(GET_SHOP_BY_USER,{
+        variables:{userId: parseInt(localStorage.getItem('userNow'))}
+    })
     const {data: shop} = useQuery(GET_SHOP_BY_PRODUCT, {
         variables: {productId: id}
     });
-    var result4 = ''
+    var result4 = '', btn = ''
+    if(shop1 != null){
+        btn =
+        <div>
+            <input type="button" value="Update" className="btn" />
+            <DeleteProduct product={id}/>
+        </div>
+    }
     if(shop != null){
         result4 = 
         <div className="card-content">
@@ -181,7 +191,9 @@ function ProductDetail(){
                     <h3>Voucher</h3>
                     {result3}
                 </div>
-                
+                <div>
+                    {btn}
+                </div>
             </div>
         </div>
     )

@@ -1,29 +1,30 @@
 import Header from "../../../components/Header/Header"
 import { useQuery } from '@apollo/client';
-import { GET_BADGE, GET_PRODUCTS_BY_ID, GET_SHOP_BY_PRODUCT, GET_TRANSACTION_BY_USER, GET_TRANSACTION_DETAIL, GET_USER_BY_ID, GET_VENDOR_BY_USER, GET_VOUCHER_CART} from '../../../graphql/user/Queries'
+import { GET_BADGE, GET_PRODUCTS_BY_ID, GET_SHOP_BY_PRODUCT, GET_TRANSACTION_BY_ID, GET_TRANSACTION_DETAIL, GET_VENDOR_BY_ID, GET_VENDOR_BY_USER, GET_VOUCHER_CART} from '../../../graphql/user/Queries'
 import './TransactionPage.scss'
+import { useParams } from "react-router-dom";
 
-function TransactionPage(){
+function TransactionDetailPage(){
+    var {id} = useParams();
     var userID =  localStorage.getItem("userNow")
-    const {data: headers} = useQuery(GET_TRANSACTION_BY_USER, {
-        variables: {userId: parseInt(userID)}
+    const {data: headers} = useQuery(GET_TRANSACTION_BY_ID, {
+        variables: {userId: parseInt(userID), id: id}
     });
     var result1 = ''
     if(headers != null){
+        var header = headers.getTransactionByID
         result1 =
         <div>
-            {headers.getTransactionByUser?.map(header=>{
-                return(
-                    <div style={{margin: "50px 0px"}} className="container2">
-                        <div>Transaction Type : {header.transactionType}</div>
-                        <div>Transaction Date : {header.transactionDate}</div>
-                        <div>Transaction Status : {header.status}</div>
-                        <div>Invoice Number : {header.invoiceNumber}</div>
-                        <DetailSection  detail={header} />
-                        <div> <b>Total : {header.total}</b> </div>
-                    </div>
-                )
-            })}
+            <div style={{margin: "50px 0px"}} className="container2">
+                <div>Transaction Status : {header.status}</div>
+                <div>Invoice Number : {header.invoiceNumber}</div>
+                <div>Transaction Date : {header.transactionDate}</div>
+                <DetailSection  detail={header} />
+                <VendorSection vendor={header.shipping_id} />
+                <div>Shipping Address : {header.shippingAddress} </div>
+                <div>Payment Method : {header.paymentMethod}</div>
+                <div>Payment Discounts : {header.paymentDiscount}</div>
+            </div>
         </div>
     }
 
@@ -33,7 +34,7 @@ function TransactionPage(){
                 <Header/>
             </div>
             <div>
-                <h3>Transaction List</h3>
+                <h3>Transaction Detail</h3>
             </div>
             <div>
                 {result1}
@@ -54,7 +55,7 @@ function DetailSection(props){
             {details.getTransactionDetail?.map(detail=>{
                 return(
                     <div className="container2">
-                        <ProductSection product={detail.product_id}/>
+                        <ProductSection product={detail.product_id} qty={detail.qty}/>
                     </div>
                 )
             })}
@@ -81,6 +82,9 @@ function ProductSection(props){
                 <div>{shop.getShopByProduct.name}</div>
                 <img src={products.getProductById.images[0].url}  width={100} alt="" />
                 <div>{products.getProductById.name}</div>
+                <div>{props.qty} item(s)</div>
+                <div>IDR {products.getProductById.price}</div>
+                <div>Subtotal : IDR {props.qty * products.getProductById.price}</div>
             </div>
         }
     }
@@ -101,4 +105,18 @@ function ShopSection(props){
     return result
 }
 
-export default TransactionPage
+function VendorSection(props){
+    const {data: vendor} = useQuery(GET_VENDOR_BY_ID, {
+        variables: {id: props.vendor}
+    });
+    console.log(vendor)
+    var result = ''
+    if(vendor != null){
+        result = 
+        <div>Shipping Vendor : {vendor.getVendorByID.name}</div>
+    }
+
+    return result
+}
+
+export default TransactionDetailPage

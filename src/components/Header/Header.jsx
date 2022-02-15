@@ -3,7 +3,7 @@ import './Header.scss'
 import {IoNotifications, IoCart, IoMail} from 'react-icons/io5'
 import e from 'cors'
 import { useQuery } from '@apollo/client'
-import { GET_SHOP_BY_USER } from '../../graphql/user/Queries'
+import { GET_SHOP_BY_USER, GET_USER_BY_ID } from '../../graphql/user/Queries'
 
 function Header(){
     var navigate = useNavigate()
@@ -53,7 +53,38 @@ function NavbarAuth(){
 }
 
 function NavbarCustomer(){
+    var userID = localStorage.getItem('userNow')
     var navigate = useNavigate()
+    const {data: user} = useQuery(GET_USER_BY_ID, {
+        variables:{id : parseInt(localStorage.getItem('userNow'))}
+    });
+    const {data: shop} = useQuery(GET_SHOP_BY_USER, {
+        variables: {userId: parseInt(userID)}
+    });
+    var result = '', result2 = '', result3 =''
+    if(user != null){
+        result =
+        <div className='location'>
+                Location : {user.getUserByID.shippingAddress[0].address}
+        </div>
+
+        result2 = 
+        <div>
+            <img src={user.getUserByID.profilePicture} className="pp" width={25} alt="hai" />
+            <a className="dropbtn"> 
+                {user.getUserByID.name}
+            </a>
+        </div>
+    }
+    if(shop != null){
+        result3 = 
+        <div>
+            <img src={shop.getShopByUser.image} className="pp" width={25} alt="hai" />
+            <a className="dropbtn"> 
+                {shop.getShopByUser.name}
+            </a>
+        </div>
+    }
     return(
         <div className='navbar'>
             <div>
@@ -82,12 +113,10 @@ function NavbarCustomer(){
                     <IoMail size={30}/>
                 </Link>
             </div>
-            <div className='location'>
-                Location : Jakarta
-            </div>
+            {result}
             <ul>
                 <li className="dropdown">
-                    <a className="dropbtn">Shop</a>
+                    {result3}
                     <div className="dropdown-content">
                         <ShopSection/>
                     </div>
@@ -95,7 +124,7 @@ function NavbarCustomer(){
             </ul>
             <ul>
                 <li className="dropdown">
-                    <a className="dropbtn">User</a>
+                    {result2}
                     <div className="dropdown-content">
                         <Link to={`/user/update`}>Update Profile</Link>
                         <Link to={`/wishlist`}>Wishlist</Link>
