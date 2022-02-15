@@ -15,6 +15,7 @@ import { VoucherPage } from './pages/user/VoucherPage/VoucherPage';
 import { OpenShop } from './pages/seller/OpenShop';
 import { UpdateShop } from './pages/seller/UpdateShop';
 import CheckoutPage from './pages/user/CartPage/CheckoutPage';
+import TransactionPage from './pages/user/Transaction/TransactionPage';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
         <Route path="/shop/create" element={<OpenShop/>}/>
         <Route path="/shop/update/:id" element={<UpdateShop/>}/>
         <Route path="/checkout" element={<CheckoutPage/>}/>
+        <Route path="/transaction" element={<TransactionPage/>}/>
       </Routes>
     </Router>
   );

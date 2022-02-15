@@ -87,11 +87,19 @@ function NavbarCustomer(){
             </div>
             <ul>
                 <li className="dropdown">
+                    <a className="dropbtn">Shop</a>
+                    <div className="dropdown-content">
+                        <ShopSection/>
+                    </div>
+                </li>
+            </ul>
+            <ul>
+                <li className="dropdown">
                     <a className="dropbtn">User</a>
                     <div className="dropdown-content">
                         <Link to={`/user/update`}>Update Profile</Link>
                         <Link to={`/wishlist`}>Wishlist</Link>
-                        <ShopSection/>
+                        <Link to={`/transaction`}>Transaction</Link>
                         <Link to={`/logout`}>Logout</Link>
                     </div>
                 </li>

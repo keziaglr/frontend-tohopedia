@@ -92,8 +92,8 @@ export const UPDATE_PROFILE = gql`
 `
 
 export const CHECKOUT = gql`
-    mutation Checkout($userId:Int!, $transactionType: String!, $paymentMethod:String!, $shippingAddress:String!, $paymentDiscount: Int!, $voucherId: Int, $shippingId : Int!, $productId: [Int!], $qty:[Int!]){
-      checkout(userId : $userId, transactionType:$transactionType paymentMethod:$paymentMethod, shippingAddress:$shippingAddress, paymentDiscount: $paymentDiscount, voucherId: $voucherId, shippingId: $shippingId, input: {productId: $productId, qty: $qty}){
+    mutation Checkout($userId:Int!, $transactionType: String!, $paymentMethod:String!, $shippingAddress:String!, $paymentDiscount: Int!, $voucherId: Int, $shippingId : Int!, $total: Int! $productId: [Int!], $qty:[Int!]){
+      checkout(userId : $userId, transactionType:$transactionType paymentMethod:$paymentMethod, shippingAddress:$shippingAddress, paymentDiscount: $paymentDiscount, voucherId: $voucherId, shippingId: $shippingId, total: $total input: {productId: $productId, qty: $qty}){
         id
       }
     }

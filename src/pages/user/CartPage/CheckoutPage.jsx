@@ -184,7 +184,8 @@ function CheckoutPage(){
                                 paymentDiscount: discount,
                                 voucherId: document.getElementById('voucherId').value,
                                 productId: arrProductId,
-                                qty: arrQty
+                                qty: arrQty,
+                                total: totalPrice
                             }
                         })
                         alert('Success Checkout')

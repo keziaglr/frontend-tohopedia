@@ -257,6 +257,18 @@ export const GET_PRODUCTS_BY_SHOP = gql`
     }
 `
 
+export const GET_PRODUCTS_BY_ID = gql`
+    query GetProductsById($id: Int!){
+      getProductById(id: $id){
+        name,
+        price,
+        images{
+          url
+        }
+      }
+    }
+`
+
 export const GET_USER_WISHLIST = gql`
     query GetUserWishlist($userId: Int!){
       getUserWishlist(userId: $userId){
@@ -342,4 +354,28 @@ export const GET_VOUCHER_CART = gql`
             endTime
         }
     }
+`
+
+export const GET_TRANSACTION_BY_USER = gql`
+    query GetTransactionByUser($userId: Int!, $keyword: String, $date: String, $status: String){
+      getTransactionByUser(userId: $userId, input:{keyword: $keyword, date: $date, status: $status}){
+        id,
+        user_id,
+        transactionType,
+        transactionDate,
+        status,
+        invoiceNumber,
+        total
+      }
+    }
+`
+
+export const GET_TRANSACTION_DETAIL = gql`
+query GetTransactionDetail($userId: Int!, $transactionId: Int!){
+  getTransactionDetail(userId: $userId, transactionId: $transactionId){
+    id,
+    transaction_id,
+    product_id, 
+  }
+}
 `
