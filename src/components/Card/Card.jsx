@@ -1,5 +1,7 @@
+import { useMutation } from '@apollo/client'
 import { useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { CREATE_CART } from '../../graphql/user/Mutations'
 import './Card.scss'
 
 export function CardProduct(props){
@@ -15,6 +17,8 @@ export function CardProduct(props){
 }
 
 export function CardProductWishlist(props){
+    var userID =  localStorage.getItem("userNow")
+    const [createCart] = useMutation(CREATE_CART)
     return(
         <Link to={`/product/${props.product.id}`} className='card-product'>
             <img src={props.product.images[0].url} alt="image" style={{width:"100%"}}></img>
@@ -22,7 +26,16 @@ export function CardProductWishlist(props){
                 <h4><b>{props.product.name}</b></h4>
                 <p>{props.product.price}</p>
             </div>
-            <Link to={`/buy`}><input type="button" className='btn' value="Buy" /></Link>
+            <input type="button" className='btn' value="Buy" onClick={()=>{
+                createCart({
+                    variables:{
+                        productId: props.product.id,
+                        userId: parseInt(userID),
+                        qty: 1,
+                        note: 'null'
+                    }
+                })
+            }} />
         </Link>
     )
 }

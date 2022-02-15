@@ -56,6 +56,15 @@ export const CREATE_WISHLIST = gql`
     }
 `
 
+export const CREATE_USER_VOUCHER = gql`
+    mutation CreateUserVoucher($userId: Int!, $voucherId: Int!){
+      createUserVoucher(userId: $userId, voucherId: $voucherId){
+        voucher_id,
+        user_id
+      }
+    }
+`
+
 export const DELETE_WISHLIST = gql`
     mutation DeleteWishlist($userId: Int!, $productId: [Int!]!){
         deleteWishlist(userId: $userId, productId: $productId){
@@ -66,8 +75,8 @@ export const DELETE_WISHLIST = gql`
 `
 
 export const DELETE_CART = gql`
-    mutation DeleteWishlist($userId: Int!, $productId: Int!){
-        deleteWishlist(userId: $userId, productId: $productId){
+    mutation DeleteCart($userId: Int!, $productId: Int!){
+        deleteCart(userId: $userId, productId: $productId){
             user_id,
             product_id
         }
@@ -79,5 +88,13 @@ export const UPDATE_PROFILE = gql`
         updateUser(id: $userId, input:{profilePicture:$profilePicture, name:$name, dob:$dob, gender:$gender, email:$email, phoneNumber:$phoneNumber, address:$address}){
             id
         }
+    }
+`
+
+export const CHECKOUT = gql`
+    mutation Checkout($userId:Int!, $transactionType: String!, $paymentMethod:String!, $shippingAddress:String!, $paymentDiscount: Int!, $voucherId: Int, $shippingId : Int!, $productId: [Int!], $qty:[Int!]){
+      checkout(userId : $userId, transactionType:$transactionType paymentMethod:$paymentMethod, shippingAddress:$shippingAddress, paymentDiscount: $paymentDiscount, voucherId: $voucherId, shippingId: $shippingId, input: {productId: $productId, qty: $qty}){
+        id
+      }
     }
 `

@@ -14,6 +14,7 @@ import { Logout, UpdateProfile } from './pages/user/UpdateProfile/UpdateProfile'
 import { VoucherPage } from './pages/user/VoucherPage/VoucherPage';
 import { OpenShop } from './pages/seller/OpenShop';
 import { UpdateShop } from './pages/seller/UpdateShop';
+import CheckoutPage from './pages/user/CartPage/CheckoutPage';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route path="/logout" element={<Logout/>}/>
         <Route path="/shop/create" element={<OpenShop/>}/>
         <Route path="/shop/update/:id" element={<UpdateShop/>}/>
+        <Route path="/checkout" element={<CheckoutPage/>}/>
       </Routes>
     </Router>
   );

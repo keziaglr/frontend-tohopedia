@@ -31,6 +31,20 @@ export const GET_USER_BY_EMAIL = gql`
     }
 `
 
+export const GET_USER_BY_ID = gql`
+    query getUserByID($id: Int!){
+        getUserByID(id: $id){
+            id,
+            email,
+            password,
+            shippingAddress{
+                id,
+                address
+            }
+        }
+    }
+`
+
 export const LOAD_CAMPAIGNS = gql`
     query campaigns{
         campaigns{
@@ -128,6 +142,17 @@ export const GET_SHOP_BY_USER = gql`
 export const GET_VENDOR_BY_PRODUCT = gql`
     query GetVendorByProduct($productId: Int!){
         getVendorByProduct(productId: $productId){
+            id,
+            name,
+            deliveryTime,
+            price,
+        }
+    }
+`
+
+export const GET_VENDOR_BY_USER = gql`
+    query GetVendorByUser($userId: Int!){
+        getVendorByUser(userId: $userId){
             id,
             name,
             deliveryTime,
@@ -258,6 +283,16 @@ export const CARTS = gql`
     }
 `
 
+export const CARTS2 = gql`
+    query Carts2($userId: Int!){
+      carts2(userId: $userId){
+        user_id,
+        product_id,
+        qty
+      }
+    }
+`
+
 export const GET_BEST_SELLING_PRODUCTS = gql`
     query GetBestSellingProducts($shopId: Int!){
       getBestSellingProducts(shopId: $shopId){
@@ -282,6 +317,21 @@ export const GET_BADGE = gql`
 export const GET_VOUCHER_BY_ID = gql`
     query GetVoucherById($voucherId: Int!){
         getVoucherById(voucherId: $voucherId){
+            id,
+        	name,
+            description,
+            discountRate,
+            code,
+            tnc,
+            startTime,
+            endTime
+        }
+    }
+`
+
+export const GET_VOUCHER_CART = gql`
+    query GetVoucherCart($userId: Int!){
+        getVoucherCart(userId: $userId){
             id,
         	name,
             description,

@@ -4,12 +4,13 @@ import { useMutation, useQuery } from '@apollo/client';
 import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID} from '../../../graphql/user/Queries'
 import {CREATE_CART, CREATE_WISHLIST} from '../../../graphql/user/Mutations'
 import {CardVoucher, CardShop} from "../../../components/Card/Card";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {IoChatbubbleEllipses, IoHeartSharp, IoShareSocialSharp} from 'react-icons/io5'
 
 function ProductDetail(){
     var {id} = useParams();
+    var navigate = useNavigate()
     const [createCart] = useMutation(CREATE_CART)
     const [createWishlist] = useMutation(CREATE_WISHLIST)
     const [qty, setQty] = useState(1)
@@ -134,7 +135,19 @@ function ProductDetail(){
                                     alert('Success Insert Cart')
                                 }
                             }} />
-                            <input type="button" className='btn' value="Instant buy" />
+                            <input type="button" className='btn' value="Instant buy" onClick={()=>{
+                                if (document.getElementById("qty").value > 0){
+                                    createCart({
+                                        variables:{
+                                            productId: id,
+                                            userId: localStorage.getItem("userNow"),
+                                            qty: document.getElementById("qty").value,
+                                            note: document.getElementById("note").value
+                                        }
+                                    })
+                                    navigate('/checkout')
+                                }
+                            }}/>
                         </div>
                         <div className='icon'>
                             <Link to={`/chat`}>

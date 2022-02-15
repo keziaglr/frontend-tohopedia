@@ -3,6 +3,7 @@ import React, {useEffect} from 'react'
 import { useMutation, useQuery } from '@apollo/client';
 import {GET_VOUCHER_BY_ID} from '../../../graphql/user/Queries'
 import Header from '../../../components/Header/Header';
+import { CREATE_USER_VOUCHER } from '../../../graphql/user/Mutations';
 
 export function VoucherPage(){
     var {id} = useParams();
@@ -11,14 +12,8 @@ export function VoucherPage(){
             voucherId: id
         }
     })
-    // id,
-    // name,
-    // description,
-    // discountRate,
-    // code,
-    // tnc,
-    // startTime,
-    // endTime
+    
+    const [createUserVoucher] = useMutation(CREATE_USER_VOUCHER)
     var result = ''
     if(data != null){
         result = 
@@ -27,6 +22,15 @@ export function VoucherPage(){
             <div><h4>Description : {data.getVoucherById.description}</h4></div>
             <div><h4>Terms and Conditions : {data.getVoucherById.tnc}</h4></div>
             <div><h6>Time : {data.getVoucherById.startTime} - {data.getVoucherById.endTime}</h6></div>
+            <input className='btn' type="button" value="Claim" onClick={()=>{
+                createUserVoucher({
+                    variables:{
+                        voucherId: data.getVoucherById.id,
+                        userId: localStorage.getItem("userNow")
+                    }
+                })
+                alert('Success Claim')
+            }} />
         </div>
     }
 

@@ -105,7 +105,7 @@ function ShopSection(){
     const {data: shop} = useQuery(GET_SHOP_BY_USER, {
         variables: {userId: parseInt(userID)}
     });
-    console.log(shop)
+    // console.log(shop)
 
     if(shop == null){
         return <Link to={`/shop/create`}>Create Shop</Link>
