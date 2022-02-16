@@ -1,12 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
 import './Header.scss'
 import {IoNotifications, IoCart, IoMail} from 'react-icons/io5'
-import e from 'cors'
 import { useQuery } from '@apollo/client'
 import { GET_SHOP_BY_USER, GET_USER_BY_ID } from '../../graphql/user/Queries'
 
 function Header(){
-    var navigate = useNavigate()
     if(localStorage.getItem('userNow') == null){
         return(
             <NavbarAuth/>
@@ -61,7 +59,7 @@ function NavbarCustomer(){
     const {data: shop} = useQuery(GET_SHOP_BY_USER, {
         variables: {userId: parseInt(userID)}
     });
-    var result = '', result2 = '', result3 =''
+    var result = '', result2 = '', result3 ='', result4 = ''
     if(user != null){
         result =
         <div className='location'>
@@ -75,6 +73,14 @@ function NavbarCustomer(){
                 {user.getUserByID.name}
             </a>
         </div>
+
+        if(user.getUserByID.role == "Admin"){
+        result4 =
+        <div>
+            <Link to={`/voucher/create`}>Voucher Management</Link>
+            <Link to={`/users`}>User Management</Link>
+        </div>
+        }
     }
     if(shop != null){
         result3 = 
@@ -85,6 +91,7 @@ function NavbarCustomer(){
             </a>
         </div>
     }
+
     return(
         <div className='navbar'>
             <div>
@@ -129,6 +136,7 @@ function NavbarCustomer(){
                         <Link to={`/user/update`}>Update Profile</Link>
                         <Link to={`/wishlist`}>Wishlist</Link>
                         <Link to={`/transaction`}>Transaction</Link>
+                        {result4}
                         <Link to={`/logout`}>Logout</Link>
                     </div>
                 </li>
@@ -142,7 +150,6 @@ function ShopSection(){
     const {data: shop} = useQuery(GET_SHOP_BY_USER, {
         variables: {userId: parseInt(userID)}
     });
-    // console.log(shop)
 
     if(shop == null){
         return <Link to={`/shop/create`}>Create Shop</Link>
@@ -150,6 +157,7 @@ function ShopSection(){
         return <div>
             <Link to={`/shop/${shop.getShopByUser.id}`}>Shop</Link>
             <Link to={`/shop/update/${shop.getShopByUser.id}`}>Edit Shop</Link>
+            <Link to={`/voucher/create/${shop.getShopByUser.id}`}>Create Voucher</Link>
         </div>
     }
 }

@@ -132,3 +132,61 @@ export const DELETE_PRODUCT = gql`
       }
     }
 `
+
+
+export const CREATE_SHOP_VOUCHER = gql`
+mutation CreateShopVoucher($shopId: Int!, $name: String!, $description: String!, $discountRate: Int!, $tnc: String!, $startTime: String!, $endTime: String!){
+  createShopVoucher(shopId: $shopId,input:{name: $name, description: $description, discountRate: $discountRate, tnc: $tnc, startTime: $startTime, endTime: $endTime}){
+    id
+  }
+}
+`
+
+export const CREATE_GLOBAL_VOUCHER = gql`
+mutation CreateGlobalVoucher($name: String!, $description: String!, $discountRate: Int!, $tnc: String!, $startTime: String!, $endTime: String!){
+  createGlobalVoucher(input:{name: $name, description: $description, discountRate: $discountRate, tnc: $tnc, startTime: $startTime, endTime: $endTime}){
+    id
+  }
+}
+`
+
+export const UPDATE_STATUS_USER = gql`
+mutation UpdateStatusUser($userId: Int!, $status:Boolean!){
+    updateStatusUser(userId: $userId, status: $status){
+        id
+    }
+}
+`
+export const SEND_REQUEST = gql`
+mutation SendRequest($userId: Int!, $status: String!){
+  sendRequest(userId: $userId, status: $status){
+    id
+  }
+}
+`
+
+export const RESPONSE_REQUEST = gql`
+mutation ResponseRequest($userId: Int!, $status:Boolean!, $requestId: Int!){
+  responseRequest(userId: $userId, status: $status, requestId: $requestId){
+    id
+  }
+}
+`
+
+export const CREATE_REVIEW = gql`
+    mutation CreateReview($userId: Int!, $transactionId: Int!, $score: Int!, $description: String!, $image: String!, $typeReview: String!){
+      createReview(userId: $userId, transactionId: $transactionId, score: $score, description: $description, image: $image, typeReview: $typeReview){
+        id
+      }
+    }
+`
+
+export const CREATE_REVIEW_REPLY = gql`
+    mutation CreateReviewReply($reviewId: Int!, $sourceId: Int!, $role: String!, $messsage: String!){
+      createReviewReply(reviewId: $reviewId, sourceId: $sourceId, role: $role, messsage: $messsage){
+        id
+      }
+    }
+`
+
+    

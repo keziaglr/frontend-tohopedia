@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import { useQuery, useMutation } from '@apollo/client';
 import { Link, useNavigate, useParams} from 'react-router-dom'
 import {GET_USER_AUTH, GET_USER_EMAIL_PASS} from '../../../graphql/user/Queries'
-import {CREATE_OTP} from '../../../graphql/user/Mutations'
+import {CREATE_OTP, SEND_REQUEST} from '../../../graphql/user/Mutations'
 
 
 function LoginPage(){
@@ -59,12 +59,21 @@ function AuthUser(){
     var {email, password} = useParams();
     const navigate = useNavigate()
     const [createOTP, {errorCreateOTP}] = useMutation(CREATE_OTP)
+    const [sendRequest] = useMutation(SEND_REQUEST)
     const {data: user} = useQuery(GET_USER_EMAIL_PASS, {
         variables: {email: email, password: password}
     })
 
     if(user != null){
         if(user.getUserByEmailPass.id === 0){
+            navigate('/login')
+        }else if(user.getUserByEmailPass.isSuspend === true){
+            if (window.confirm("Your account is suspended. Do you want to send request?") == true) {
+                sendRequest({variables:{
+                    userId: user.getUserByEmailPass.id,
+                    status: ""
+                }})
+            } 
             navigate('/login')
         }else{
             createOTP({

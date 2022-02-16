@@ -1,0 +1,12 @@
+.footer{
+    background-color: white;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 50px;
+    a{
+        color: grey;
+    }
+    a:hover{
+        color: green
+    }
+}

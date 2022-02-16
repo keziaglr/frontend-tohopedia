@@ -1,8 +1,10 @@
 import Header from "../../../components/Header/Header"
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { GET_BADGE, GET_PRODUCTS_BY_ID, GET_SHOP_BY_PRODUCT, GET_TRANSACTION_BY_ID, GET_TRANSACTION_DETAIL, GET_VENDOR_BY_ID, GET_VENDOR_BY_USER, GET_VOUCHER_CART} from '../../../graphql/user/Queries'
 import './TransactionPage.scss'
 import { useParams } from "react-router-dom";
+import { CREATE_REVIEW } from "../../../graphql/user/Mutations";
+import { Footer } from "../../../components/Footer/Footer";
 
 function TransactionDetailPage(){
     var {id} = useParams();
@@ -10,9 +12,70 @@ function TransactionDetailPage(){
     const {data: headers} = useQuery(GET_TRANSACTION_BY_ID, {
         variables: {userId: parseInt(userID), id: id}
     });
+
+    const [createReview] = useMutation(CREATE_REVIEW)
     var result1 = ''
     if(headers != null){
         var header = headers.getTransactionByID
+//$userId: Int!, $transactionId: Int!, $score: Int!, $description: String!, $image: String!, $typeReview: String!
+        var form = ''
+        if(header.status == "Selesai"){
+            form = <form className="container" style={{"margin":"0px 500px"}}>
+                <div><h3>Review</h3></div>
+                
+                <div>
+                    <label htmlFor="desc">Description</label>
+                    <input type="text" name="desc" id="desc" />
+                </div>
+                <div>
+                    <label htmlFor="score">Score</label>
+                    <input type="number" max={5} name="score" id="score" />
+                </div><div>
+                    <label htmlFor="image">Image</label>
+                    <input type="text" name="image" id="image" />
+                </div>
+                <div>
+                    <select name="type" id="type">
+                        <option value="">Public</option>
+                        <option value="Anonymous">Anonymous</option>
+                    </select>
+                </div>
+                <div>
+                <input type="button" value="Submit" className="btn" onClick={()=>{
+                    if(document.getElementById('score').value == "" || document.getElementById('desc').value == ""){
+                        alert('All fields must be filled')
+                    }else{
+                        if(document.getElementById('image').value != "") {
+                            createReview({
+                                variables:{
+                                    userId: parseInt(userID),
+                                    transactionId: id,
+                                    score: document.getElementById('score').value,
+                                    description: document.getElementById('desc').value,
+                                    image: document.getElementById('image').value,
+                                    typeReview: document.getElementById('type').value
+                                }
+                            })
+                        }else if(document.getElementById('image').value == "") {
+                            createReview({
+                                variables:{
+                                    userId: parseInt(userID),
+                                    transactionId: id,
+                                    score: document.getElementById('score').value,
+                                    description: document.getElementById('desc').value,
+                                    image: "null",
+                                    typeReview: document.getElementById('type').value
+                                }
+                            })
+                        }
+
+                        alert('Success Insert Review')
+                    }
+                }}/>
+                </div>
+            </form>
+        }
+
         result1 =
         <div>
             <div style={{margin: "50px 0px"}} className="container2">
@@ -39,6 +102,8 @@ function TransactionDetailPage(){
             <div>
                 {result1}
             </div>
+            {form}
+            <Footer/>
         </div>
     )
 }

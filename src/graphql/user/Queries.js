@@ -39,10 +39,25 @@ export const GET_USER_BY_ID = gql`
             password,
             name,
             profilePicture,
+            role,
+            isSuspend,
             shippingAddress{
                 id,
                 address
             }
+        }
+    }
+`
+
+
+export const USERS = gql`
+    query users{
+        users{
+            id,
+            email,
+            password,
+            name,
+            isSuspend
         }
     }
 `
@@ -112,10 +127,21 @@ export const GET_PRODUCT_BY_ID = gql`
             soldCount,
             rating,
             description,
+            discount,
             images{
                 id,
                 url,
-            }
+            }, metaData{
+                id,
+                label, 
+                value
+            },  review{
+                id,
+                user_id,
+                score,
+                description,
+                createdAt
+                }
 
         }
     }
@@ -413,6 +439,43 @@ query GetTransactionDetail($userId: Int!, $transactionId: Int!){
     transaction_id,
     product_id, 
     qty
+  }
+}
+`
+
+export const REQUESTS = gql`
+query Requests{
+  requests{
+    id,
+    user_id,
+    status
+  }
+}
+
+`
+
+export const GET_REVIEW_BY_TYPE = gql`
+query GetReviewsByType($productID: Int!, $typeReview: String!, $filter: String!){
+      getReviewsByType(productId: $productID, typeReview: $typeReview, filter: $filter){
+        id,
+        user_id,
+        score,
+        description,
+        createdAt,
+        type,
+        image
+      }
+    }
+`
+
+export const GET_REVIEW_DETAIL = gql`
+query GetReviewDetail($reviewId: Int!){
+  getReviewDetail(reviewId: $reviewId){
+    id,
+    review_id,
+    source_id,
+    role,
+    messsage
   }
 }
 `

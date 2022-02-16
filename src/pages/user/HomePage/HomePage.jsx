@@ -4,8 +4,22 @@ import {LOAD_CAMPAIGNS, LOAD_DISC_PRODUCTS, LOAD_CATEGORIES} from '../../../grap
 import {CardProduct, CardCategory} from "../../../components/Card/Card";
 import ImageCarousel from "../../../components/Carousel/ImageCarousel";
 import React, { useState, useEffect } from 'react'
+import { onError } from "@apollo/client/link/error";
+import { Footer } from "../../../components/Footer/Footer";
 
 function HomePage(){
+
+    // onError(({ graphQLErrors, networkError }) => {
+    //   if (graphQLErrors)
+    //     graphQLErrors.forEach(({ message, locations, path }) =>
+    //       console.log(
+    //         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+    //       )
+    //     );
+    //   if (networkError) console.log(`[Network error]: ${networkError}`);
+    // });
+
+
     const {data: data3} = useQuery(LOAD_CAMPAIGNS);
     const [slideIndex, setIndex] = useState(1)
     var result3 = ''
@@ -94,6 +108,9 @@ function HomePage(){
             <div>
                 <h4>Categories</h4>
                 {result1}
+            </div>
+            <div>
+                <Footer/>
             </div>
         </div>
     )

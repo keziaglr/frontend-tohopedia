@@ -1,13 +1,14 @@
 import Header from "../../../components/Header/Header"
 import ImageGallery from "../../../components/ImageGallery/ImageGallery"
 import { useMutation, useQuery } from '@apollo/client';
-import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID, GET_SHOP_BY_USER} from '../../../graphql/user/Queries'
+import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID, GET_SHOP_BY_USER, GET_USER_BY_ID, GET_REVIEW_BY_TYPE, GET_REVIEW_DETAIL, GET_SHOP_BY_ID, GET_BADGE} from '../../../graphql/user/Queries'
 import {CREATE_CART, CREATE_WISHLIST} from '../../../graphql/user/Mutations'
 import {CardVoucher, CardShop} from "../../../components/Card/Card";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import {IoChatbubbleEllipses, IoHeartSharp, IoShareSocialSharp} from 'react-icons/io5'
+import {IoChatbubbleEllipses, IoHeartSharp, IoShareSocialSharp, IoStar} from 'react-icons/io5'
 import { DeleteProduct } from "../ManageProduct/ManageProduct";
+import { Source } from "graphql";
 
 function ProductDetail(){
     var {id} = useParams();
@@ -15,19 +16,30 @@ function ProductDetail(){
     const [createCart] = useMutation(CREATE_CART)
     const [createWishlist] = useMutation(CREATE_WISHLIST)
     const [qty, setQty] = useState(1)
+    const [filter, setFilter] = useState("")
+    const [type, setType] = useState("")
     const {data: shop1} = useQuery(GET_SHOP_BY_USER,{
         variables:{userId: parseInt(localStorage.getItem('userNow'))}
     })
     const {data: shop} = useQuery(GET_SHOP_BY_PRODUCT, {
         variables: {productId: id}
     });
-    var result4 = '', btn = ''
+
+    const {data: review} = useQuery(GET_REVIEW_BY_TYPE, {
+        variables: {productID: id, typeReview: type, filter: filter}
+    });
+
+    var result4 = '', btn = '', result6 = ''
     if(shop1 != null){
+        if(shop1.id == id){
         btn =
         <div>
+            <Link to={`/product/update/${id}`}>
             <input type="button" value="Update" className="btn" />
+            </Link>
             <DeleteProduct product={id}/>
         </div>
+        }
     }
     if(shop != null){
         result4 = 
@@ -68,6 +80,40 @@ function ProductDetail(){
         result5 = <div>
             Subtotal = {subtotal} 
         </div>
+    }
+
+    if(review != null){
+        result6 = <div >
+        <h3>Review</h3>
+        <form action="formReview">
+            <div>
+                <select name="filter" id="filter">
+                    <option value="">All</option>
+                    <option value="5">5 stars</option>
+                    <option value="4">4 stars</option>
+                    <option value="3">3 stars</option>
+                    <option value="2">2 stars</option>
+                    <option value="1">1 stars</option>
+                    <option value="img">With Image</option>
+                </select>
+            </div>
+            <input type="button" value="Filter" className="btn" onClick={()=>{
+                setFilter(document.getElementById('filter').value)
+                
+            }} />
+        </form>
+        {review.getReviewsByType.map(review=>{
+            return(
+                <div style={{margin: "50px 0px 0px 0px"}} >
+                    <div className="container-wishlist">
+                        <UserReview user={review.user_id} review={review}/>
+                        <div>{review.createdAt}</div>
+                    </div>
+                    <ReviewReply id={review.id}/>
+                </div>
+            )
+        })}
+        </div> 
     }
 
     var result2 = ''
@@ -194,9 +240,134 @@ function ProductDetail(){
                 <div>
                     {btn}
                 </div>
+                <div>
+                    {result6}
+                </div>
             </div>
         </div>
     )
+}
+
+function UserReview(props){
+    const {data: user} = useQuery(GET_USER_BY_ID, {
+        variables:{id: props.user}
+    })
+
+    var result = ''
+    if(user != null){
+        if(props.review.type != "Anonymous"){
+
+        result = 
+        <div>
+        <img src={user.getUserByID.profilePicture} className="pp" width={50} height={50} alt="hai" />
+        <div> 
+            <div>
+               <b>{user.getUserByID.name}</b>  
+            </div>
+            <div>
+                 {props.review.description}
+            </div>
+            <div>
+                 {props.review.score}
+                 <IoStar/>
+            </div>
+            <img src={props.review.image} width={100} alt="" />
+        </div>
+    </div>
+        }else{
+            result = 
+            <div>
+            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" className="pp" width={50} height={50} alt="hai" />
+            <div> 
+                <div>
+                   <b>Anonymous</b>  
+                </div>
+                <div>
+                     {props.review.description}
+                </div>
+                <div>
+                     {props.review.score}
+                     <IoStar/>
+                </div>
+                <img src={props.review.image} width={100} alt="" />
+            </div>
+        </div>
+        }
+
+    }
+    return result
+}
+
+
+function ReviewReply(props){
+    const {data: review} = useQuery(GET_REVIEW_DETAIL, {
+        variables:{reviewId: props.id}
+    })
+    
+    var result = ''
+    if(review != null){
+        if(review.getReviewDetail.length != 0){
+            result = 
+        <div>
+            {review.getReviewDetail?.map(r=>{  
+                if(r.role == "Shop"){
+                    return(
+                        <div className="container-wishlist" style={{"margin-top": "10px"}}>
+                            <div>
+                                <div><b><ShopSource id={r.source_id}/></b></div>
+                                <div>{r.messsage}</div></div>
+                        </div>
+                    )
+                }else if(r.role == "User"){
+                    return(
+                        <div className="container-wishlist" style={{"margin-top": "10px"}}>
+                            <div>
+                                <div><b><UserSource id={r.source_id}/></b></div>
+                                <div>{r.messsage}</div></div>
+                        </div>
+                    )
+                }
+            })}
+        </div>
+        }
+    }
+    return result
+}
+
+function UserSource(props){
+    const {data: user} = useQuery(GET_USER_BY_ID, {
+        variables:{
+            id: props.id
+        }
+    })
+
+    var result = ''
+    if(user != null){
+        result = user.getUserByID.name
+    }
+    return result
+}
+
+function ShopSource(props){
+    const {data: shop} = useQuery(GET_SHOP_BY_ID, {
+        variables:{
+            shopId: props.id
+        }
+    })
+
+    const {data: badge} = useQuery(GET_BADGE, {
+        variables: {shopID: props.id}
+    });
+
+    var result = ''
+    if(shop != null){
+        if(badge != null){
+            result = 
+                <div>{shop.getShopByID.name} ({badge.getBadge.badge}) </div>
+            
+        }
+    }
+    return result
 }
 
 export default ProductDetail

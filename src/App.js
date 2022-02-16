@@ -17,7 +17,10 @@ import { UpdateShop } from './pages/seller/UpdateShop';
 import CheckoutPage from './pages/user/CartPage/CheckoutPage';
 import TransactionPage from './pages/user/Transaction/TransactionPage';
 import TransactionDetailPage from './pages/user/Transaction/TransactionDetailPage';
-import { DeleteProduct, InsertProduct } from './pages/user/ManageProduct/ManageProduct';
+import { DeleteProduct, InsertProduct, UpdateProduct } from './pages/user/ManageProduct/ManageProduct';
+import { VoucherManagement } from './pages/seller/VoucherManagement';
+import { VoucherManagementGlobal } from './pages/admin/VoucherManagementGlobal';
+import { UserPage } from './pages/admin/UserPage';
 
 function App() {
   return (
@@ -48,7 +51,10 @@ function App() {
         <Route path="/transaction" element={<TransactionPage/>}/>
         <Route path="/transaction/:id" element={<TransactionDetailPage/>}/>
         <Route path="/product/insert" element={<InsertProduct/>}/>
-        <Route path="/product/delete/:id" element={<DeleteProduct/>}/>
+        <Route path="/product/update/:id" element={<UpdateProduct/>}/>
+        <Route path="/voucher/create/:id" element={<VoucherManagement/>}/>
+        <Route path="/voucher/create" element={<VoucherManagementGlobal/>}/>
+        <Route path="/users" element={<UserPage/>}/>
       </Routes>
     </Router>
   );
