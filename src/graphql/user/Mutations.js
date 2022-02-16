@@ -189,4 +189,38 @@ export const CREATE_REVIEW_REPLY = gql`
     }
 `
 
+export const CREATE_DISCUSSION = gql`
+mutation CreateDiscussion(
+  $userId: Int!
+  $productId: Int!
+  $content: String!
+) {
+  createDiscussion(
+    userId: $userId
+    productId: $productId,
+    content: $content
+  ) {
+    id
+  }
+}
+`
+
+export const CREATE_DISCUSSION_REPLY = gql`
+mutation CreateDiscussionReply(
+  $discussionId: Int!
+  $sourceId: Int!
+  $role: String!
+  $messsage: String!
+) {
+  createDiscussionReply(
+    discussionId: $discussionId
+    sourceId: $sourceId
+    role: $role
+    messsage: $messsage
+  ) {
+    id
+  }
+}
+
+`
     

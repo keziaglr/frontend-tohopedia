@@ -479,3 +479,30 @@ query GetReviewDetail($reviewId: Int!){
   }
 }
 `
+
+export const GET_DISCUSSION = gql`
+query GetDiscussion(
+  $productId: Int!
+) {
+  getDiscussion(
+    productId: $productId
+  ) {
+    id
+    user_id
+    product_id
+    content
+  }
+}
+`
+
+export const GET_DISCUSSION_DETAIL = gql`
+query GetDiscussionDetail($discussionId: Int!) {
+  getDiscussionDetail(discussionId: $discussionId) {
+    id
+    discussion_id
+    source_id
+    role
+    messsage
+  }
+}
+`

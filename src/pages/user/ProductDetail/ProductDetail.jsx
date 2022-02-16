@@ -1,14 +1,15 @@
 import Header from "../../../components/Header/Header"
 import ImageGallery from "../../../components/ImageGallery/ImageGallery"
 import { useMutation, useQuery } from '@apollo/client';
-import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID, GET_SHOP_BY_USER, GET_USER_BY_ID, GET_REVIEW_BY_TYPE, GET_REVIEW_DETAIL, GET_SHOP_BY_ID, GET_BADGE} from '../../../graphql/user/Queries'
-import {CREATE_CART, CREATE_WISHLIST} from '../../../graphql/user/Mutations'
+import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID, GET_SHOP_BY_USER, GET_USER_BY_ID, GET_REVIEW_BY_TYPE, GET_REVIEW_DETAIL, GET_SHOP_BY_ID, GET_BADGE, GET_DISCUSSION, GET_DISCUSSION_DETAIL} from '../../../graphql/user/Queries'
+import {CREATE_CART, CREATE_DISCUSSION, CREATE_DISCUSSION_REPLY, CREATE_WISHLIST} from '../../../graphql/user/Mutations'
 import {CardVoucher, CardShop} from "../../../components/Card/Card";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {IoChatbubbleEllipses, IoHeartSharp, IoShareSocialSharp, IoStar} from 'react-icons/io5'
 import { DeleteProduct } from "../ManageProduct/ManageProduct";
 import { Source } from "graphql";
+import e from "cors";
 
 function ProductDetail(){
     var {id} = useParams();
@@ -29,9 +30,13 @@ function ProductDetail(){
         variables: {productID: id, typeReview: type, filter: filter}
     });
 
+    const {data: discussion} = useQuery(GET_DISCUSSION, {
+        variables: {productId: id}
+    });
+
     var result4 = '', btn = '', result6 = ''
     if(shop1 != null){
-        if(shop1.id == id){
+        if(shop1.getShopByUser.id == id){
         btn =
         <div>
             <Link to={`/product/update/${id}`}>
@@ -115,6 +120,122 @@ function ProductDetail(){
         })}
         </div> 
     }
+    const [createDiscussionReply] = useMutation(CREATE_DISCUSSION_REPLY)
+    const [createDiscussion] = useMutation(CREATE_DISCUSSION)
+    var result7 = ''
+    if(discussion != null){
+        if(shop1 != null){
+            if(shop1.getShopByUser.id == id){
+                result7=
+                <div>
+                        <h3>Discussion</h3>
+                        <div>
+                        <input type="text" name="discussion" id="discussion" placeholder="Input New Discussion"/>
+                            <input type="button" className="btn" value="Create Discussion" onClick={()=>{
+                                
+                                if(document.getElementById('discussion').value != ""){
+                                    createDiscussion({
+                                        variables:{
+                                            userId: parseInt(localStorage.getItem('userNow')),
+                                            productId: id,
+                                            content: document.getElementById('discussion1').value
+                                        }
+                                    })
+                                    alert('Success Create Discussion')
+                                }else{
+                                    alert('All field must be filled')
+                                }
+                            }} />
+                        </div>
+                    {discussion.getDiscussion.map(discussion=>{
+                    return(
+                        <div style={{margin: "50px 0px 0px 0px"}} >
+                            <div className="container-wishlist">
+                                <UserDiscussion user={discussion.user_id} discussion={discussion}/>
+                                <div>{discussion.createdAt}</div>
+                                <div><input type="text" name="reply" id={"reply"+discussion.id} placeholder="Input Reply Discussion"/>
+                                <input type="button" value="Reply" className="btn" onClick={()=>{
+                                    var temp = 'reply'+discussion.id
+                                    if(document.getElementById(temp).value != ""){
+                                        createDiscussionReply({variables:
+                                        {
+                                            discussionId: discussion.id,
+                                            sourceId: id,
+                                            role: "Shop",
+                                            messsage: document.getElementById(temp).value
+                                        }})
+                                        alert('Success Reply Discussion')
+                                    }else{
+                                        alert('All field must be filled')
+                                    }
+                                }} />
+                                </div>
+                            
+                            </div>
+                            <DiscussionReply key={discussion.id} id={discussion.id}/>
+                        </div>
+                    )
+                })}
+                </div>
+        }else{
+            result7=
+            <div>
+                <div>
+
+                <h3>Discussion</h3>
+                    <div>
+                        <input type="text" name="discussion" id="discussion" placeholder="Input New Discussion"/>
+                        <input type="button" className="btn" value="Create Discussion" onClick={()=>{
+                            
+                            if(document.getElementById('discussion').value != ""){
+                                createDiscussion({
+                                    variables:{
+                                        userId: parseInt(localStorage.getItem('userNow')),
+                                        productId: id,
+                                        content: document.getElementById('discussion').value
+                                    }
+                                })
+                                alert('Success Create Discussion')
+                            }else{
+                                alert('All field must be filled')
+                            }
+                        }} />
+                    </div>
+                </div>
+                {discussion.getDiscussion.map(discussion=>{
+                return(
+                    <div style={{margin: "50px 0px 0px 0px"}} >
+                        <div className="container-wishlist">
+                            <UserDiscussion user={discussion.user_id} discussion={discussion}/>
+                            <div>{discussion.createdAt}</div>
+                            <div><input type="text" name="reply" id="reply" placeholder="Input Reply Discussion"/>
+                            <input type="button" value="Reply" className="btn" onClick={()=>{
+                               var temp = 'reply'+discussion.id
+                               if(document.getElementById(temp).value != ""){
+                                    createDiscussionReply({variables:
+                                    {
+                                        discussionId: discussion.id,
+                                        sourceId: parseInt(localStorage.getItem('userNow')),
+                                        role: "User",
+                                        messsage: document.getElementById(temp).value
+                                    }})
+                                    alert('Success Reply Discussion!')
+                                }else{
+                                    alert('All field must be filled')
+                                }
+                            }} />
+                            </div>
+                        
+                        </div>
+                        <DiscussionReply id={discussion.id}/>
+                    </div>
+                )
+            })}
+            </div>            
+        }
+    }
+    }
+
 
     var result2 = ''
     const {data: ship} = useQuery(GET_VENDOR_BY_PRODUCT, {
@@ -243,6 +364,9 @@ function ProductDetail(){
                 <div>
                     {result6}
                 </div>
+                <div>
+                    {result7}
+                </div>
             </div>
         </div>
     )
@@ -295,6 +419,30 @@ function UserReview(props){
         }
 
     }
+    return result
+}
+
+function UserDiscussion(props){
+    const {data: user} = useQuery(GET_USER_BY_ID, {
+        variables:{id: props.user}
+    })
+
+    var result = ''
+    if(user != null){
+
+        result = 
+            <div>
+            <img src={user.getUserByID.profilePicture} className="pp" width={50} height={50} alt="hai" />
+            <div> 
+                <div>
+                <b>{user.getUserByID.name}</b>  
+                </div>
+                <div>
+                    {props.discussion.content}
+                </div>
+            </div>
+        </div>
+        }
     return result
 }
 
@@ -365,6 +513,42 @@ function ShopSource(props){
             result = 
                 <div>{shop.getShopByID.name} ({badge.getBadge.badge}) </div>
             
+        }
+    }
+    return result
+}
+
+
+function DiscussionReply(props){
+    const {data: review} = useQuery(GET_DISCUSSION_DETAIL, {
+        variables:{discussionId: props.id}
+    })
+    
+    var result = ''
+    if(review != null){
+        if(review.getDiscussionDetail.length != 0){
+            result = 
+            <div>
+            {review.getDiscussionDetail?.map(r=>{  
+                if(r.role == "Shop"){
+                    return(
+                        <div className="container-wishlist" style={{"margin-top": "10px"}}>
+                            <div>
+                                <div><b><ShopSource id={r.source_id}/></b></div>
+                                <div>{r.messsage}</div></div>
+                        </div>
+                    )
+                }else if(r.role == "User"){
+                    return(
+                        <div className="container-wishlist" style={{"margin-top": "10px"}}>
+                            <div>
+                                <div><b><UserSource id={r.source_id}/></b></div>
+                                <div>{r.messsage}</div></div>
+                        </div>
+                    )
+                }
+            })}
+        </div>
         }
     }
     return result
