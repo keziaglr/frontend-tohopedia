@@ -2,7 +2,7 @@ import Header from "../../../components/Header/Header"
 import ImageGallery from "../../../components/ImageGallery/ImageGallery"
 import { useMutation, useQuery } from '@apollo/client';
 import {GET_SHOP_BY_PRODUCT, GET_VENDOR_BY_PRODUCT, GET_VOUCHER_BY_PRODUCT, GET_PRODUCT_BY_ID, GET_SHOP_BY_USER, GET_USER_BY_ID, GET_REVIEW_BY_TYPE, GET_REVIEW_DETAIL, GET_SHOP_BY_ID, GET_BADGE, GET_DISCUSSION, GET_DISCUSSION_DETAIL} from '../../../graphql/user/Queries'
-import {CREATE_CART, CREATE_DISCUSSION, CREATE_DISCUSSION_REPLY, CREATE_WISHLIST} from '../../../graphql/user/Mutations'
+import {CREATE_CART, CREATE_CHAT_HEADER, CREATE_DISCUSSION, CREATE_DISCUSSION_REPLY, CREATE_WISHLIST} from '../../../graphql/user/Mutations'
 import {CardVoucher, CardShop} from "../../../components/Card/Card";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -34,16 +34,25 @@ function ProductDetail(){
         variables: {productId: id}
     });
 
-    var result4 = '', btn = '', result6 = ''
+    var result4 = '', btn = '', result6 = '', chatIcon = ''
     if(shop1 != null){
-        if(shop1.getShopByUser.id == id){
-        btn =
-        <div>
-            <Link to={`/product/update/${id}`}>
-            <input type="button" value="Update" className="btn" />
-            </Link>
-            <DeleteProduct product={id}/>
-        </div>
+        chatIcon = <IoChatbubbleEllipses size={25} onClick={()=>{
+            createHeaderChat({
+                variables:{
+                    shopId: shop1.getShopByUser.id,
+                    userId: parseInt(localStorage.getItem("userNow")),
+                }
+            })
+            alert('Success Insert Chat')
+        }} />
+        if(shop1.getShopByUser.user_id == localStorage.getItem('userNow')){
+            btn =
+            <div>
+                <Link to={`/product/update/${id}`}>
+                <input type="button" value="Update" className="btn" />
+                </Link>
+                <DeleteProduct product={id}/>
+            </div>
         }
     }
     if(shop != null){
@@ -120,6 +129,7 @@ function ProductDetail(){
         })}
         </div> 
     }
+    const [createHeaderChat] = useMutation(CREATE_CHAT_HEADER)
     const [createDiscussionReply] = useMutation(CREATE_DISCUSSION_REPLY)
     const [createDiscussion] = useMutation(CREATE_DISCUSSION)
     var result7 = ''
@@ -327,9 +337,9 @@ function ProductDetail(){
                             }}/>
                         </div>
                         <div className='icon'>
-                            <Link to={`/chat`}>
-                                <IoChatbubbleEllipses size={25}/>
-                            </Link>
+                            {/* <Link to={`/chat`}> */}
+                                {chatIcon}
+                            {/* </Link> */}
                             <IoHeartSharp size={25} onClick={()=>{
                                 createWishlist({
                                     variables:{
@@ -507,7 +517,7 @@ function ShopSource(props){
         variables: {shopID: props.id}
     });
 
-    var result = ''
+    var result = '', chatIcon = ''
     if(shop != null){
         if(badge != null){
             result = 

@@ -40,7 +40,9 @@ export const GET_USER_BY_ID = gql`
             name,
             profilePicture,
             role,
+            dob,
             isSuspend,
+            phoneNumber,
             shippingAddress{
                 id,
                 address
@@ -128,6 +130,7 @@ export const GET_PRODUCT_BY_ID = gql`
             rating,
             description,
             discount,
+            sub_category_id,
             images{
                 id,
                 url,
@@ -162,7 +165,8 @@ export const GET_SHOP_BY_USER = gql`
         getShopByUser(userId: $userId){
             id, 
             name,
-            image, 
+            image,
+            user_id, 
         }
     }
 `
@@ -276,6 +280,11 @@ export const GET_SHOP_BY_ID = gql`
         badges_id,
         points,
         video,
+        nameSlug,
+        description,
+        slogan,
+        operationalHour,
+        operationalStatus,
         promo{
           id,
           idx,
@@ -506,3 +515,28 @@ query GetDiscussionDetail($discussionId: Int!) {
   }
 }
 `
+
+export const GET_CHAT = gql`
+query GetChat($userId:Int!){
+  getChat(userId:$userId){
+    id,
+    shop_id,
+    user_id
+  }
+}
+`
+
+export const GET_CHAT_DETAIL = gql`
+query GetChatDetail($chatId: Int!){
+  getChatDetail(chatId:$chatId){
+    id,
+    chat_id,
+    source_id,
+    role,
+    message,
+    image,
+    type
+  }
+}
+`
+

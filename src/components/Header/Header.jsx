@@ -134,6 +134,7 @@ function NavbarCustomer(){
                     {result2}
                     <div className="dropdown-content">
                         <Link to={`/user/update`}>Update Profile</Link>
+                        <Link to={`/topup`}>Top Up</Link>
                         <Link to={`/wishlist`}>Wishlist</Link>
                         <Link to={`/transaction`}>Transaction</Link>
                         {result4}

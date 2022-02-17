@@ -160,10 +160,10 @@ export function UpdateProduct(){
     var result = ''
     if (categories != null){
         result =
-        <select name="categoryId" id="categoryId">
+        <select name="categoryId" id="categoryId" value={products.sub_category_id} onChange={handleChanged}>
         {categories.categories?.map(category=>{
             return(
-                <option key={category.id} value={category.id}>{category.name}</option>
+                <option key={category.id} value={category.id} >{category.name}</option>
                 )
             })}
         </select>

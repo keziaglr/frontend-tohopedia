@@ -60,6 +60,16 @@ body{
     border-radius: 5px;
 }
 
+.btn2{
+    border: none;
+    background-color: white;
+    border: 2px $main-color solid;
+    color: $main-color;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
 a{
     text-decoration: none;
     color: $main-color;

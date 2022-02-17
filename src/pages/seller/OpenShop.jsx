@@ -32,16 +32,20 @@ export function OpenShop(){
                     <div>
                         <input className='btn' type="submit" value="Create Shop" onClick={
                             ()=>{
-                                createShop({
-                                    variables:{
-                                        userId: parseInt(localStorage.getItem('userNow')),
-                                        phoneNumber: document.getElementById('phoneNumber').value, 
-                                        name: document.getElementById('shopName').value, 
-                                        nameSlug: document.getElementById('shopNameSlug').value, 
-                                        address: document.getElementById('shopAddress').value
-                                    }
-                                })
-                                alert('Success Create Shop')
+                                if(document.getElementById('phoneNumber').value != "" || document.getElementById('shopName').value != "" || document.getElementById('shopNameSlug').value != "" || document.getElementById('shopAddress').value != ""){
+                                    createShop({
+                                        variables:{
+                                            userId: parseInt(localStorage.getItem('userNow')),
+                                            phoneNumber: document.getElementById('phoneNumber').value, 
+                                            name: document.getElementById('shopName').value, 
+                                            nameSlug: document.getElementById('shopNameSlug').value, 
+                                            address: document.getElementById('shopAddress').value
+                                        }
+                                    })
+                                    alert('Success Create Shop')
+                                }else{
+                                    alert('All fields must be filled')
+                                }
                             }
                         } />
                     </div>

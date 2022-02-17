@@ -21,6 +21,8 @@ import { DeleteProduct, InsertProduct, UpdateProduct } from './pages/user/Manage
 import { VoucherManagement } from './pages/seller/VoucherManagement';
 import { VoucherManagementGlobal } from './pages/admin/VoucherManagementGlobal';
 import { UserPage } from './pages/admin/UserPage';
+import ChatPage from './pages/user/ChatPage/ChatPage';
+import { TopUpPage } from './pages/user/UpdateProfile/TopUpPage';
 
 function App() {
   return (
@@ -55,6 +57,8 @@ function App() {
         <Route path="/voucher/create/:id" element={<VoucherManagement/>}/>
         <Route path="/voucher/create" element={<VoucherManagementGlobal/>}/>
         <Route path="/users" element={<UserPage/>}/>
+        <Route path="/chat" element={<ChatPage/>}/>
+        <Route path="/topup" element={<TopUpPage/>}/>
       </Routes>
     </Router>
   );

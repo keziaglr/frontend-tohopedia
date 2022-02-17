@@ -45,7 +45,7 @@ function CheckoutPage(){
     if(vouchers != null){
         result3 =
         <select id="voucherId">
-            <option value="">Choose</option>
+            <option value="0">Choose</option>
             {vouchers.getVoucherCart?.map(voucher=>{
                 arrDisc.push(voucher)
                 return(

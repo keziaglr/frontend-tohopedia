@@ -84,7 +84,7 @@ export const DELETE_CART = gql`
 `
 
 export const UPDATE_PROFILE = gql`
-    mutation UpdateUser($userId: Int!, $profilePicture: String!, $name: String!, $dob: Date!, $gender: String!, $email: String!, $phoneNumber: String!, $address: String!){
+    mutation UpdateUser($userId: Int!, $profilePicture: String!, $name: String!, $dob: Date!, $gender: String!, $email: String!, $phoneNumber: String!, $address: [String!]!){
         updateUser(id: $userId, input:{profilePicture:$profilePicture, name:$name, dob:$dob, gender:$gender, email:$email, phoneNumber:$phoneNumber, address:$address}){
             id
         }
@@ -224,3 +224,26 @@ mutation CreateDiscussionReply(
 
 `
     
+export const CREATE_CHAT = gql`
+mutation CreateChat($userId: Int!, $shopId: Int!, $sourceId:Int!, $role:String!, $message:String!, $image:String!, $type:String!){
+  createChat(userId: $userId, shopId: $shopId, sourceId:$sourceId, role:$role, message:$message, image:$image, type:$type){
+    id
+  }
+}
+`
+
+export const CREATE_CHAT_HEADER = gql`
+mutation createHeaderChat($userId: Int!, $shopId: Int!){
+  createHeaderChat(userId: $userId, shopId: $shopId){
+    id
+  }
+}
+`
+
+export const TOP_UP = gql`
+mutation TopUp($code: String!, $value: Int!, $userId: Int!){
+  topup(code: $code, value: $value, userId: $userId){
+    id
+  }
+}
+`

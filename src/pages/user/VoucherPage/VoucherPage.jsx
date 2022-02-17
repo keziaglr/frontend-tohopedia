@@ -22,15 +22,22 @@ export function VoucherPage(){
             <div><h4>Description : {data.getVoucherById.description}</h4></div>
             <div><h4>Terms and Conditions : {data.getVoucherById.tnc}</h4></div>
             <div><h6>Time : {data.getVoucherById.startTime} - {data.getVoucherById.endTime}</h6></div>
-            <input className='btn' type="button" value="Claim" onClick={()=>{
-                createUserVoucher({
-                    variables:{
-                        voucherId: data.getVoucherById.id,
-                        userId: localStorage.getItem("userNow")
+            <div>
+                <input type="text" name="code" id="code" />
+                <input className='btn' type="button" value="Claim" onClick={()=>{
+                    if(data.getVoucherById.code == document.getElementById('code').value){
+                        createUserVoucher({
+                            variables:{
+                                voucherId: data.getVoucherById.id,
+                                userId: localStorage.getItem("userNow")
+                            }
+                        })
+                        alert('Success Claim')
+                    }else{
+                        alert('Invalid code')
                     }
-                })
-                alert('Success Claim')
-            }} />
+                }} />
+            </div>
         </div>
     }
 

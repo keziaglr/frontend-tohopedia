@@ -94,6 +94,7 @@ function CartPage(){
                             </div>
                         )        
                     })}
+                    <div>
                     <input type="button" className="btn" value="Refresh" onClick={()=>{
                         var total = 0, disc = 0
                         for (let i = 0; i < arrDisc.length; i++) {
@@ -112,6 +113,7 @@ function CartPage(){
                         setDiscount(disc)
 
                     }} />
+                    </div>
             </form>
         }
         }
