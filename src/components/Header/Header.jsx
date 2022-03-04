@@ -30,7 +30,9 @@ function NavbarAuth(){
                 <input className='btn' type="button" value="Search" onClick={e =>{
                     var search = document.getElementById("search").value
 
-                    if(search !== ""){
+                    if(search == ""){
+                        alert('Search must be filled!')
+                    }else{
                         navigate('/search/'+search)
                     }
                 }} />

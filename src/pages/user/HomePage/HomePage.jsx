@@ -1,11 +1,14 @@
 import Header from "../../../components/Header/Header"
+import { Query } from '@apollo/client/react/components';
 import { useQuery, useMutation } from '@apollo/client';
-import {LOAD_CAMPAIGNS, LOAD_DISC_PRODUCTS, LOAD_CATEGORIES} from '../../../graphql/user/Queries'
+import {LOAD_CAMPAIGNS, LOAD_DISC_PRODUCTS, LOAD_CATEGORIES, PRODUCTS} from '../../../graphql/user/Queries'
 import {CardProduct, CardCategory} from "../../../components/Card/Card";
 import ImageCarousel from "../../../components/Carousel/ImageCarousel";
 import React, { useState, useEffect } from 'react'
 import { onError } from "@apollo/client/link/error";
 import { Footer } from "../../../components/Footer/Footer";
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { ProductQueryList } from "./ProductQueryList";
 
 function HomePage(){
 
@@ -76,18 +79,86 @@ function HomePage(){
         </div>
     }
 
-    const {data: data2} = useQuery(LOAD_DISC_PRODUCTS);
+    var fetchMoreData = () => {
+        setTimeout(() => {
+            if(limit <= 15){
+                setLimit(limit+5)
+            }
+        }, 1500);
+    };
+
+    const [limit, setLimit] = useState(5)
+
+    const {data: data2} = useQuery(PRODUCTS, {
+        variables: {limit:limit, offset: 0}
+    });
     var result2 = ''
+
     if(data2 != null){
-        const productList2 = data2.getProductsTopDisc
-        result2 = <div className="card-content">
+        const productList2 = data2.products
+        console.log(productList2)
+        result2 = 
+        <InfiniteScroll dataLength={productList2.length} next={fetchMoreData}
+        hasMore={true} loader={<h4>Loading...</h4>}>
+            <div className="card-content">
             {productList2?.map(product=>{
                 return(
                     <CardProduct key={product.id} product={product}/>
                 )
             })}
         </div>
+        </InfiniteScroll> 
     }
+
+    // const handleScroll = ({ currentTarget }, onLoadMore) => {
+    //     if (
+    //       currentTarget.scrollTop + currentTarget.clientHeight >=
+    //       currentTarget.scrollHeight
+    //     ) {
+    //       onLoadMore();
+    //     }
+    // };
+    
+    // const ProductList = ({ products, onLoadMore }) => (
+    //     <div>
+    //       <ul
+    //         onScroll={e => handleScroll(e, onLoadMore)}
+    //       >
+    //         {products?.map(product=>{
+    //             return(
+    //                 <CardProduct key={product.id} product={product}/>
+    //             )
+    //         })}
+    //       </ul>
+    //     </div>
+    // );
+
+    // const ProductQueryList = () => (
+    //     <Query query={PRODUCTS}>
+    //       {({ data2, fetchMore }) =>
+    //         data2 && (
+    //           <ProductList
+    //             products={data2.products || []}
+    //             onLoadMore={() =>
+    //               fetchMore({
+    //                 variables: {
+    //                   offset: data2.products.length
+    //                 },
+    //                 updateQuery: (prev, { fetchMoreResult }) => {
+    //                   if (!fetchMoreResult) return prev;
+    //                   return Object.assign({}, prev, {
+    //                     chapters: [...prev.products, ...fetchMoreResult.products]
+    //                   });
+    //                 }
+    //               })
+    //             }
+    //           />
+    //         )
+    //       }
+    //     </Query>
+    //   );
+        // }
+
 
     return(
         <div>
@@ -103,13 +174,16 @@ function HomePage(){
             </div>
             <div>
                 <h4>Recommended For You</h4>
-                {result2}
+                {result}
             </div>
             <div>
                 <h4>Categories</h4>
                 {result1}
             </div>
             <div>
+            <h4>Products</h4>
+                {/* <ProductQueryList/> */}
+                {result2}
                 <Footer/>
             </div>
         </div>

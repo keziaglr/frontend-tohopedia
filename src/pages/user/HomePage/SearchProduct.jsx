@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import {LOAD_PRODUCTS_SEARCH, GET_SHOP_MATCH, GET_PRODUCTS_MATCH, LOAD_COURIERS} from '../../../graphql/user/Queries'
 import {CardProduct, CardShop} from "../../../components/Card/Card";
 import { useParams } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function SearchProduct(){
     let {q} = useParams();
@@ -38,8 +39,9 @@ function SearchProduct(){
         if(value === "") return null
         return value;
     } 
+    const [limit, setLimit] = useState(5);
     const {data: products} = useQuery(LOAD_PRODUCTS_SEARCH, {
-        variables: {search: q, sort: sort, type: shopType, location: location, maxPrice: maxPrice, minPrice: minPrice, courier: courier, rating: rating, shippingTime: duration, productAdded: productAdded}
+        variables: {limit: limit, offset: 0,search: q, sort: sort, type: shopType, location: location, maxPrice: maxPrice, minPrice: minPrice, courier: courier, rating: rating, shippingTime: duration, productAdded: productAdded}
     });
 
     const {data: couriers} = useQuery(LOAD_COURIERS)
@@ -60,16 +62,25 @@ function SearchProduct(){
     });
     var result = ''
     var productList = ''
+    var fetchMoreData = () => {
+        setTimeout(() => {
+            if(limit <= 15){
+                setLimit(limit+5)
+            }
+        }, 1500);
+    };
     if(products != null){
         productList = products.getProductsSearch
-        result = <div className="card-content">
+        result = 
+        <InfiniteScroll dataLength={productList.length} next={fetchMoreData}
+        hasMore={true} loader={<h4>Loading...</h4>}>
+            <div className="card-content">
             {productList?.map(product=>{
-                
                 return(
                     <CardProduct key={product.id} product={product}/>
                 )
             })}
-        </div>
+        </div></InfiniteScroll>
     }
 
     var courierRes = ''

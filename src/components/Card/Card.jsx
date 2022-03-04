@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 import { CREATE_CART } from '../../graphql/user/Mutations'
 import './Card.scss'
 
+
+  
+
 export function CardProduct(props){
     return(
         <Link to={`/product/${props.product.id}`} className='card-product'>

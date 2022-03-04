@@ -97,9 +97,24 @@ export const LOAD_DISC_PRODUCTS = gql`
     }
 `
 
+export const PRODUCTS = gql`
+    query Products($limit: Int!, $offset: Int!){
+        products(limit: $limit, offset: $offset){
+            id,
+            name,
+            price,
+            discount,
+            images{
+            id,
+            url
+            }
+        }
+    }
+`
+
 export const LOAD_PRODUCTS_SEARCH = gql`
-query GetProductsByShop($search: String!, $sort: String, $type: [Int], $location: [String], $maxPrice: Int, $minPrice: Int, $courier: [Int], $rating: Int, $shippingTime: Int, $productAdded:Int){
-    getProductsSearch(search: $search, sort: $sort, input:{type: $type, location: $location, maxPrice: $maxPrice, minPrice: $minPrice, courier: $courier, rating: $rating, shippingTime: $shippingTime, productAdded: $productAdded} ){
+query GetProductsByShop($limit: Int!, $offset: Int!, $search: String!, $sort: String, $type: [Int], $location: [String], $maxPrice: Int, $minPrice: Int, $courier: [Int], $rating: Int, $shippingTime: Int, $productAdded:Int){
+    getProductsSearch(limit: $limit, offset: $offset, search: $search, sort: $sort, input:{type: $type, location: $location, maxPrice: $maxPrice, minPrice: $minPrice, courier: $courier, rating: $rating, shippingTime: $shippingTime, productAdded: $productAdded} ){
         id,
         name,
     		price,
