@@ -35,17 +35,18 @@ function ProductDetail(){
     });
 
     var result4 = '', btn = '', result6 = '', chatIcon = ''
-    if(shop1 != null){
+    if(shop != null){
         chatIcon = <IoChatbubbleEllipses size={25} onClick={()=>{
             createHeaderChat({
                 variables:{
-                    shopId: shop1.getShopByUser.id,
+                    shopId: shop.getShopByProduct.id,
                     userId: parseInt(localStorage.getItem("userNow")),
                 }
             })
             alert('Success Insert Chat')
         }} />
-        if(shop1.getShopByUser.user_id == localStorage.getItem('userNow')){
+        // console.log(shop.getShopByProduct.user_id)
+        if(shop.getShopByProduct.user_id == localStorage.getItem('userNow')){
             btn =
             <div>
                 <Link to={`/product/update/${id}`}>
@@ -54,8 +55,6 @@ function ProductDetail(){
                 <DeleteProduct product={id}/>
             </div>
         }
-    }
-    if(shop != null){
         result4 = 
         <div className="card-content">
             <CardShop key={shop.getShopByProduct.id} shop={shop.getShopByProduct}/>

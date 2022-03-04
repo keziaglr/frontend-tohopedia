@@ -171,6 +171,7 @@ export const GET_SHOP_BY_PRODUCT = gql`
             id, 
             name,
             image, 
+            user_id
         }
     }
 `
